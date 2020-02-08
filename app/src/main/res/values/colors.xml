@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--fdee00-->
+    <color name="colorPrimary">#FF8B5C</color>
+    <color name="colorPrimaryDark">#FF8B5C</color>
+    <color name="colorAccent">#FF8B5C</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="transparent">#00000000</color>
+    <color name="delete">#e71717</color>
+    <color name="gray0">#FAFAFA</color>
+    <color name="gray1">#F5F5F5</color>
+    <color name="gray2">#EEEEEE</color>
+    <color name="gray3">#E0E0E0</color>
+    <color name="gray4">#bababa</color>
+    <color name="gray5">#424242</color>
+    <color name="gray6">#212121</color>
+    <color name="gray7">#757575</color>
+    <color name="active">#43A047</color>
+    <color name="distance">#FFFF00</color>
+    <color name="rating">#FBC02D</color>
+    <color name="press_color">#383E99</color>
+    <color name="gradient_start_color">#7ec242</color>
+    <color name="gradient_center_color">#a0cc36</color>
+    <color name="gradient_end_color">#e7e01c</color>
+    <color name="delete_color">#E21B1B</color>
+    <color name="green_text">#93c83a</color>
+    <color name="gray_text">#cccccc</color>
+    <color name="blue0">#21496e</color>
+    <color name="blue1">#00285d</color>
+
+</resources>
