@@ -242,6 +242,9 @@ public class Fragment_Client_Store extends Fragment {
         {
             this.location = location;
             String loc = location.getLatitude()+","+location.getLongitude();
+            Log.e("location",loc);
+            Log.e("query",query);
+
 
             Api.getService("https://maps.googleapis.com/maps/api/")
                     .getNearbyStores(loc,15000,query,current_language,getString(R.string.map_api_key))
