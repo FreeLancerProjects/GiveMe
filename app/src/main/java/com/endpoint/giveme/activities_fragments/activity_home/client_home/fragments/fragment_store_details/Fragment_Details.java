@@ -354,8 +354,13 @@ public class Fragment_Details extends Fragment implements OnMapReadyCallback {
                     public void onResponse(Call<PlaceDetailsModel> call, Response<PlaceDetailsModel> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             dialog.dismiss();
+try {
+    updateHoursUI(response.body());
 
-                            updateHoursUI(response.body());
+}
+catch (Exception e){
+
+}
                         } else {
                             dialog.dismiss();
 
