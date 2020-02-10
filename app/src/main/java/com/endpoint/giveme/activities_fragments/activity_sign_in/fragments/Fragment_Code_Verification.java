@@ -3,6 +3,7 @@ package com.endpoint.giveme.activities_fragments.activity_sign_in.fragments;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,17 @@ import com.endpoint.giveme.activities_fragments.activity_sign_in.activity.SignIn
 import com.endpoint.giveme.remote.Api;
 import com.endpoint.giveme.share.Common;
 import com.endpoint.giveme.tags.Tags;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskExecutors;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,7 +49,10 @@ public class Fragment_Code_Verification extends Fragment {
     private SignInActivity activity;
     private String phone_code="",phone_number="",country_code="";
     private boolean canResend = true;
-
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    private String id;
+    private String code;
+    private FirebaseAuth mAuth;
     private CountDownTimer countDownTimer;
 
     @Nullable
@@ -81,7 +94,8 @@ public class Fragment_Code_Verification extends Fragment {
 
                 if (canResend)
                 {
-                    sendSMSCode(phone_code,phone_number);
+                   // sendSMSCode(phone_code,phone_number);
+                    sendverficationcode(phone_number,phone_code.replace("00","+"));
                 }
             }
         });
@@ -97,6 +111,51 @@ public class Fragment_Code_Verification extends Fragment {
 
         startCounter();
 
+        authn();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendverficationcode(phone_number,phone_code.replace("00","+"));
+            }
+        },3);
+
+    }
+
+    private void authn() {
+
+        mAuth= FirebaseAuth.getInstance();
+
+        mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                Log.e("id",s);
+                id=s;
+            }
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+//                Log.e("code",phoneAuthCredential.getSmsCode());
+//phoneAuthCredential.getProvider();
+                if(phoneAuthCredential.getSmsCode()!=null){
+                    code=phoneAuthCredential.getSmsCode();
+                    edt_code.setText(code);
+                    siginwithcredental(phoneAuthCredential);}
+                else {
+                    siginwithcredental(phoneAuthCredential);
+                }
+
+
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e("llll",e.getMessage());
+            }
+
+
+        };
+
     }
 
     private void checkData() {
@@ -104,7 +163,7 @@ public class Fragment_Code_Verification extends Fragment {
         if (!TextUtils.isEmpty(code))
         {
             Common.CloseKeyBoard(activity,edt_code);
-            ValidateCode(code);
+            verfiycode (code);
         }else
             {
                 edt_code.setError(getString(R.string.field_req));
@@ -126,7 +185,6 @@ public class Fragment_Code_Verification extends Fragment {
 
                         if (response.isSuccessful())
                         {
-                            countDownTimer.cancel();
                             activity.signIn(phone_number,country_code,phone_code);
                         }else
                             {
@@ -151,6 +209,40 @@ public class Fragment_Code_Verification extends Fragment {
                         }catch (Exception e){}
                     }
                 });
+    }
+    private void verfiycode(String code) {
+        // Toast.makeText(register_activity,code,Toast.LENGTH_LONG).show();
+        countDownTimer.cancel();
+
+        Log.e("ccc",code);
+        if(id!=null){
+
+            PhoneAuthCredential credential=PhoneAuthProvider.getCredential(id,code);
+            siginwithcredental(credential);}
+    }
+
+    private void siginwithcredental(PhoneAuthCredential credential) {
+
+        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if(task.isSuccessful()){
+                  //  Log.e("data",phone);
+                    mAuth.signOut();
+                    //activity.NavigateToClientHomeActivity();
+ValidateCode("1234");
+                }
+
+
+            }
+        });
+    }
+
+    private void sendverficationcode(String phone, String phone_code) {
+        Log.e("kkk",phone_code+phone);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phone_code+phone,59, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD,  mCallbacks);
+
     }
 
     private void startCounter()
