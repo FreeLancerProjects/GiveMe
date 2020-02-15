@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">جف مى</string>
+    <string name="app_name">قيف مى</string>
     <string name="map_api_key">AIzaSyCbc2Y5AIwZ8uUeHRUXiozGN3CnpjKT0oI</string>
     <string name="notifications">الإشعارات</string>
     <string name="si_su">قم بتسجيل الدخول أو إنشاء حساب جديد .</string>
@@ -148,7 +148,7 @@
     <string name="couriers">مرسول</string>
     <string name="go_to_order">متابعة طلبك</string>
     <string name="order_sent_successfully_order_number_is">تم إرسال طلبك بنجاح رقم طلبك هو</string>
-    <string name="national_number">رقم السجل/الإقامة</string>
+    <string name="national_number">الرقم الوطنى </string>
     <string name="address">العنوان</string>
     <string name="identity_card_image">صورة البطاقة الشخصية</string>
     <string name="license_image">صورة رخصة القيادة</string>

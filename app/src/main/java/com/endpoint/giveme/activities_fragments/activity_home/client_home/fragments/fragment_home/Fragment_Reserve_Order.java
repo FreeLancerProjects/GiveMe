@@ -394,23 +394,28 @@ public class Fragment_Reserve_Order extends Fragment {
 
             ratingBar.setRating(placeModel.getRating());
             tvRate.setText(String.format("%s%s%s","(", String.valueOf(placeModel.getRating()),")"));
+try {
+    if (placeDetails.getReviews()!=null)
+    {
+        if (placeDetails.getReviews().size()>0)
+        {
+            tvReview.setText(String.format("%s %s", String.valueOf(placeDetails.getReviews().size()),getString(R.string.reviews)));
 
-            if (placeDetails.getReviews()!=null)
-            {
-                if (placeDetails.getReviews().size()>0)
-                {
-                    tvReview.setText(String.format("%s %s", String.valueOf(placeDetails.getReviews().size()),getString(R.string.reviews)));
+        }else
+        {
+            tvReview.setText(String.format("%s %s","0",getString(R.string.reviews)));
 
-                }else
-                    {
-                        tvReview.setText(String.format("%s %s","0",getString(R.string.reviews)));
+        }
+    }else
+    {
+        tvReview.setText(String.format("%s %s","0",getString(R.string.reviews)));
 
-                    }
-            }else
-                {
-                    tvReview.setText(String.format("%s %s","0",getString(R.string.reviews)));
+    }
+}
+catch (Exception e){
 
-                }
+}
+
 
             if (placeModel.getPhotosList().size()>0)
             {
@@ -424,24 +429,29 @@ public class Fragment_Reserve_Order extends Fragment {
             }
 
 
+try {
+    if (placeDetails.getPhotos()!=null)
+    {
+        if (placeDetails.getPhotos().size()>0)
+        {
+            llSlider.setVisibility(View.VISIBLE);
+            adapter = new SliderStoreDetailsAdapter(placeDetails.getPhotos(),activity);
+            pager.setAdapter(adapter);
 
-            if (placeDetails.getPhotos()!=null)
-            {
-                if (placeDetails.getPhotos().size()>0)
-                {
-                    llSlider.setVisibility(View.VISIBLE);
-                    adapter = new SliderStoreDetailsAdapter(placeDetails.getPhotos(),activity);
-                    pager.setAdapter(adapter);
+        }else
+        {
+            llSlider.setVisibility(View.GONE);
+        }
+    }else
+    {
+        llSlider.setVisibility(View.GONE);
 
-                }else
-                {
-                    llSlider.setVisibility(View.GONE);
-                }
-            }else
-            {
-                llSlider.setVisibility(View.GONE);
+    }
+}
+catch (Exception e){
 
-            }
+}
+
 
 
         }

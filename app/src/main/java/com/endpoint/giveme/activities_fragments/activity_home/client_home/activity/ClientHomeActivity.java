@@ -1025,6 +1025,8 @@ userSingleTone=UserSingleTone.getInstance();
     public void DisplayFragmentReserveOrder(PlaceModel placeModel, PlaceDetailsModel.PlaceDetails placeDetails)
     {
 
+try {
+
 
         if (userModel==null)
         {
@@ -1048,6 +1050,8 @@ userSingleTone=UserSingleTone.getInstance();
                         }
 
                     }
+                    }}catch (Exception e){
+
                     }
 
 

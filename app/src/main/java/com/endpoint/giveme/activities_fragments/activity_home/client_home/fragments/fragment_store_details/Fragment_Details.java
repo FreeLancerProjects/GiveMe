@@ -247,7 +247,14 @@ public class Fragment_Details extends Fragment implements OnMapReadyCallback {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.DisplayFragmentReserveOrder(placeModel,placeDetails);
+                try {
+                    activity.DisplayFragmentReserveOrder(placeModel,placeDetails);
+
+
+                }
+                catch (Exception e){
+
+                }
             }
         });
 
@@ -354,13 +361,10 @@ public class Fragment_Details extends Fragment implements OnMapReadyCallback {
                     public void onResponse(Call<PlaceDetailsModel> call, Response<PlaceDetailsModel> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             dialog.dismiss();
-try {
+
     updateHoursUI(response.body());
 
-}
-catch (Exception e){
 
-}
                         } else {
                             dialog.dismiss();
 
@@ -392,72 +396,77 @@ catch (Exception e){
     private void updateHoursUI(PlaceDetailsModel body) {
 
         placeDetails = body.getResult();
-
-        if (body.getResult().getOpening_hours()!=null)
+try {
+    if (body.getResult().getOpening_hours()!=null)
+    {
+        ll_open_hour.setVisibility(View.VISIBLE);
+        ll_today.setVisibility(View.VISIBLE);
+        if (body.getResult().getOpening_hours().getPeriods().size()==7)
         {
-            ll_open_hour.setVisibility(View.VISIBLE);
-            ll_today.setVisibility(View.VISIBLE);
-            if (body.getResult().getOpening_hours().getPeriods().size()==7)
-            {
-                List<String> time = body.getResult().getOpening_hours().getWeekday_text();
+            List<String> time = body.getResult().getOpening_hours().getWeekday_text();
 
-                tv_today.setText(time.get(0).split(":",2)[1].trim());
+            tv_today.setText(time.get(0).split(":",2)[1].trim());
 
-                tv_d1.setText(time.get(0).split(":", 2)[0].trim());
-                tv_d11.setText(time.get(0).split(":", 2)[1].trim());
+            tv_d1.setText(time.get(0).split(":", 2)[0].trim());
+            tv_d11.setText(time.get(0).split(":", 2)[1].trim());
 
-                tv_d2.setText(time.get(1).split(":",2)[0].trim());
-                tv_d22.setText(time.get(1).split(":",2)[1].trim());
+            tv_d2.setText(time.get(1).split(":",2)[0].trim());
+            tv_d22.setText(time.get(1).split(":",2)[1].trim());
 
-                tv_d3.setText(time.get(2).split(":",2)[0].trim());
-                tv_d33.setText(time.get(2).split(":",2)[1].trim());
+            tv_d3.setText(time.get(2).split(":",2)[0].trim());
+            tv_d33.setText(time.get(2).split(":",2)[1].trim());
 
-                tv_d4.setText(time.get(3).split(":",2)[0].trim());
-                tv_d44.setText(time.get(3).split(":",2)[1].trim());
+            tv_d4.setText(time.get(3).split(":",2)[0].trim());
+            tv_d44.setText(time.get(3).split(":",2)[1].trim());
 
-                tv_d5.setText(time.get(4).split(":",2)[0].trim());
-                tv_d55.setText(time.get(4).split(":",2)[1].trim());
+            tv_d5.setText(time.get(4).split(":",2)[0].trim());
+            tv_d55.setText(time.get(4).split(":",2)[1].trim());
 
-                tv_d6.setText(time.get(5).split(":",2)[0].trim());
-                tv_d66.setText(time.get(5).split(":",2)[1].trim());
+            tv_d6.setText(time.get(5).split(":",2)[0].trim());
+            tv_d66.setText(time.get(5).split(":",2)[1].trim());
 
-                tv_d7.setText(time.get(6).split(":",2)[0].trim());
-                tv_d77.setText(time.get(6).split(":",2)[1].trim());
+            tv_d7.setText(time.get(6).split(":",2)[0].trim());
+            tv_d77.setText(time.get(6).split(":",2)[1].trim());
 
 
-            }else if (body.getResult().getOpening_hours().getPeriods().size()==1)
-            {
-                List<String> time = body.getResult().getOpening_hours().getWeekday_text();
+        }else if (body.getResult().getOpening_hours().getPeriods().size()==1)
+        {
+            List<String> time = body.getResult().getOpening_hours().getWeekday_text();
 
-                tv_today.setText(R.string.all_day);
+            tv_today.setText(R.string.all_day);
 
-                tv_d1.setText(time.get(0).split(":")[0].trim());
-                tv_d11.setText(R.string.all_day);
+            tv_d1.setText(time.get(0).split(":")[0].trim());
+            tv_d11.setText(R.string.all_day);
 
-                tv_d2.setText(time.get(1).split(":")[0].trim());
-                tv_d22.setText(R.string.all_day);
+            tv_d2.setText(time.get(1).split(":")[0].trim());
+            tv_d22.setText(R.string.all_day);
 
-                tv_d3.setText(time.get(2).split(":")[0].trim());
-                tv_d33.setText(R.string.all_day);
+            tv_d3.setText(time.get(2).split(":")[0].trim());
+            tv_d33.setText(R.string.all_day);
 
-                tv_d4.setText(time.get(3).split(":")[0].trim());
-                tv_d44.setText(R.string.all_day);
+            tv_d4.setText(time.get(3).split(":")[0].trim());
+            tv_d44.setText(R.string.all_day);
 
-                tv_d5.setText(time.get(4).split(":")[0].trim());
-                tv_d55.setText(R.string.all_day);
+            tv_d5.setText(time.get(4).split(":")[0].trim());
+            tv_d55.setText(R.string.all_day);
 
-                tv_d6.setText(time.get(5).split(":")[0].trim());
-                tv_d66.setText(R.string.all_day);
+            tv_d6.setText(time.get(5).split(":")[0].trim());
+            tv_d66.setText(R.string.all_day);
 
-                tv_d7.setText(time.get(6).split(":")[0].trim());
-                tv_d77.setText(R.string.all_day);
+            tv_d7.setText(time.get(6).split(":")[0].trim());
+            tv_d77.setText(R.string.all_day);
 
-            }
-        }else
-            {
-                ll_open_hour.setVisibility(View.GONE);
-                //tv_today.setVisibility(View.GONE);
-            }
+        }
+    }else
+    {
+        ll_open_hour.setVisibility(View.GONE);
+        //tv_today.setVisibility(View.GONE);
+    }
+}
+catch (Exception e){
+
+}
+
 
 
     }

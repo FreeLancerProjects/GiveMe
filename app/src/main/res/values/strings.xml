@@ -149,7 +149,7 @@
     <string name="couriers">Couriers</string>
     <string name="go_to_order">Follow order</string>
     <string name="order_sent_successfully_order_number_is">Order sent successfully order number is</string>
-    <string name="national_number">Residence</string>
+    <string name="national_number">The ID number</string>
     <string name="address">Address</string>
     <string name="identity_card_image">Identity card image</string>
     <string name="license_image">License image</string>
