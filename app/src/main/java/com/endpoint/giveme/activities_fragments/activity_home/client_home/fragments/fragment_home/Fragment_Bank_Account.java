@@ -46,7 +46,6 @@ public class Fragment_Bank_Account extends Fragment {
     private BankAdapter adapter;
     private List<BankDataModel.BankModel> bankModelList;
     private ClientHomeActivity activity;
-
     public static Fragment_Bank_Account newInstance()
     {
         return new Fragment_Bank_Account();

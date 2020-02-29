@@ -116,7 +116,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ClientHomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,GoogleApiClient.ConnectionCallbacks,LocationListener {
+public class ClientHomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
     private final String gps_perm = Manifest.permission.ACCESS_FINE_LOCATION;
     private final int gps_req = 22;
     private FragmentManager fragmentManager;
@@ -157,20 +157,19 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
     private Call<ResponseBody> call;
     private String state = "";
     private boolean canUpdateLocation = true;
-    private double rate=0.0;
+    private double rate = 0.0;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
-    private  LocationCallback  locationCallback;
-
+    private LocationCallback locationCallback;
 
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(Language_Helper.updateResources(base,Language_Helper.getLanguage(base)));
+        super.attachBaseContext(Language_Helper.updateResources(base, Language_Helper.getLanguage(base)));
     }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_home);
 
@@ -186,17 +185,14 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
-    private void getDataFromIntent()
-    {
+    private void getDataFromIntent() {
         Intent intent = getIntent();
-        if (intent!=null)
-        {
+        if (intent != null) {
             try {
-                if (intent.hasExtra("status"))
-                {
+                if (intent.hasExtra("status")) {
                     String status = intent.getStringExtra("status");
 
-                    Log.e("status",status+"");
+                    Log.e("status", status + "");
 
                     new Handler()
                             .postDelayed(new Runnable() {
@@ -205,18 +201,14 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                     NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                     manager.cancelAll();
                                 }
-                            },1);
+                            }, 1);
 
-                    if (status.equals(String.valueOf(Tags.STATE_ORDER_NEW)))
-                    {
+                    if (status.equals(String.valueOf(Tags.STATE_ORDER_NEW))) {
 
                         DisplayFragmentMyOrders(0);
 
 
-
-
-                    }else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_SEND_OFFER)))
-                    {
+                    } else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_SEND_OFFER))) {
                         new Handler()
                                 .postDelayed(new Runnable() {
                                     @Override
@@ -224,7 +216,7 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         DisplayFragmentNotification();
 
                                     }
-                                },1000);
+                                }, 1000);
                         new Handler()
                                 .postDelayed(new Runnable() {
                                     @Override
@@ -232,9 +224,8 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                         manager.cancelAll();
                                     }
-                                },1);
-                    }else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_REFUSE_ORDER)))
-                    {
+                                }, 1);
+                    } else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_REFUSE_ORDER))) {
                         new Handler()
                                 .postDelayed(new Runnable() {
                                     @Override
@@ -242,7 +233,7 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         DisplayFragmentNotification();
 
                                     }
-                                },1000);
+                                }, 1000);
 
                         new Handler()
                                 .postDelayed(new Runnable() {
@@ -251,47 +242,10 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                         manager.cancelAll();
                                     }
-                                },1);
+                                }, 1);
 
-                    }else if (status.equals(String.valueOf(Tags.STATE_CLIENT_ACCEPT_OFFER)))
-                    {
+                    } else if (status.equals(String.valueOf(Tags.STATE_CLIENT_ACCEPT_OFFER))) {
 
-                        DisplayFragmentMyOrders(1);
-
-
-
-                        new Handler()
-                                .postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                        manager.cancelAll();
-                                    }
-                                },1);
-
-
-                    }else if (status.equals(String.valueOf(Tags.STATE_CLIENT_REFUSE_OFFER)))
-                    {
-                        new Handler()
-                                .postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        DisplayFragmentNotification();
-
-                                    }
-                                },1000);
-
-                        new Handler()
-                                .postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                        manager.cancelAll();
-                                    }
-                                },1);
-                    }
-                    else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_COLLECTING_ORDER)) || status.equals(String.valueOf(Tags.STATE_DELEGATE_COLLECTED_ORDER)) || status.equals(String.valueOf(Tags.STATE_DELEGATE_DELIVERING_ORDER)))
-                    {
                         DisplayFragmentMyOrders(1);
 
 
@@ -302,9 +256,40 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                         manager.cancelAll();
                                     }
-                                },1);
-                    }else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_DELIVERED_ORDER)))
-                    {
+                                }, 1);
+
+
+                    } else if (status.equals(String.valueOf(Tags.STATE_CLIENT_REFUSE_OFFER))) {
+                        new Handler()
+                                .postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        DisplayFragmentNotification();
+
+                                    }
+                                }, 1000);
+
+                        new Handler()
+                                .postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                        manager.cancelAll();
+                                    }
+                                }, 1);
+                    } else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_COLLECTING_ORDER)) || status.equals(String.valueOf(Tags.STATE_DELEGATE_COLLECTED_ORDER)) || status.equals(String.valueOf(Tags.STATE_DELEGATE_DELIVERING_ORDER))) {
+                        DisplayFragmentMyOrders(1);
+
+
+                        new Handler()
+                                .postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                        manager.cancelAll();
+                                    }
+                                }, 1);
+                    } else if (status.equals(String.valueOf(Tags.STATE_DELEGATE_DELIVERED_ORDER))) {
                         DisplayFragmentMyOrders(2);
 
                         new Handler()
@@ -314,36 +299,32 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                         manager.cancelAll();
                                     }
-                                },1);
-                    }
-                    else if(status.equals("-1")){
+                                }, 1);
+                    } else if (status.equals("-1")) {
                         DisplayFragmentMyOrders(-1);
                     }
 
                 }
-            }catch (Exception e)
-            {
-                Log.e("Exception",e.getMessage()+"_");
+            } catch (Exception e) {
+                Log.e("Exception", e.getMessage() + "_");
             }
 
         }
     }
 
-    private void initView()
-    {
-        if(getIntent().getStringExtra("data")!=null&&getIntent().getStringExtra("data").equals("1")){
+    private void initView() {
+        if (getIntent().getStringExtra("data") != null && getIntent().getStringExtra("data").equals("1")) {
             Logout();
         }
         Paper.init(this);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-userSingleTone=UserSingleTone.getInstance();
+        userSingleTone = UserSingleTone.getInstance();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
 
         fragmentManager = getSupportFragmentManager();
 
-        if (userModel!=null)
-        {
+        if (userModel != null) {
             updateToken();
             getNotificationCount();
             EventBus.getDefault().register(this);
@@ -357,41 +338,38 @@ userSingleTone=UserSingleTone.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         String date = dateFormat.format(new Date(timeNow));
 
-        if (!date.equals(visitTime))
-        {
+        if (!date.equals(visitTime)) {
             addVisit(date);
         }
 
 
-
     }
-    private void updateToken()
-    {
+
+    private void updateToken() {
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (task.isSuccessful())
-                        {
+                        if (task.isSuccessful()) {
                             String token = task.getResult().getToken();
                             Api.getService(Tags.base_url)
-                                    .updateToken(userModel.getData().getUser_id(),token)
+                                    .updateToken(userModel.getData().getUser_id(), token)
                                     .enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                                            if (response.isSuccessful())
-                                            {
-                                                Log.e("Success","token updated");
+                                            if (response.isSuccessful()) {
+                                                Log.e("Success", "token updated");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                                             try {
-                                                Log.e("Error",t.getMessage());
-                                            }catch (Exception e){}
+                                                Log.e("Error", t.getMessage());
+                                            } catch (Exception e) {
+                                            }
                                         }
                                     });
                         }
@@ -399,8 +377,7 @@ userSingleTone=UserSingleTone.getInstance();
                 });
     }
 
-    private void initGoogleApiClient()
-    {
+    private void initGoogleApiClient() {
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
@@ -408,28 +385,24 @@ userSingleTone=UserSingleTone.getInstance();
                 .build();
         googleApiClient.connect();
     }
-    ///////////////////////////////////
-    private void LocationListener(final Location location)
-    {
 
-        if (location!=null)
-        {
-            if (userModel!=null)
-            {
+    ///////////////////////////////////
+    private void LocationListener(final Location location) {
+
+        if (location != null) {
+            if (userModel != null) {
                 UpdateUserLocation(location);
             }
             ClientHomeActivity.this.location = location;
         }
-        if (fragment_client_store!=null&&fragment_client_store.isAdded())
-        {
+        if (fragment_client_store != null && fragment_client_store.isAdded()) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (canUpdateLocation)
-                            {
+                            if (canUpdateLocation) {
                                 canUpdateLocation = false;
-                                fragment_client_store.getNearbyPlaces(location,"restaurant");
+                                fragment_client_store.getNearbyPlaces(location, "restaurant");
 
                             }
                             /*if (intentService!=null)
@@ -437,36 +410,32 @@ userSingleTone=UserSingleTone.getInstance();
                                 stopService(intentService);
                             }*/
                         }
-                    },1);
+                    }, 1);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ListenNotificationChange(final NotStateModel notStateModel)
-    {
+    public void ListenNotificationChange(final NotStateModel notStateModel) {
 
-        if (fragment_client_order_details!=null&&fragment_client_order_details.isAdded())
-        {
+        if (fragment_client_order_details != null && fragment_client_order_details.isAdded()) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             fragment_client_order_details.updateStepView(Integer.parseInt(notStateModel.getNotification_state()));
                         }
-                    },1);
+                    }, 1);
         }
 
-        canRead =true;
+        canRead = true;
         RefreshFragment_Notification();
         getNotificationCount();
         RefreshFragment_Order();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ListenNotificationRate(NotificationTypeModel notificationTypeModel)
-    {
-        if (userModel.getData().getUser_type().equals(Tags.TYPE_DELEGATE))
-        {
+    public void ListenNotificationRate(NotificationTypeModel notificationTypeModel) {
+        if (userModel.getData().getUser_type().equals(Tags.TYPE_DELEGATE)) {
             getUserDataById(userModel.getData().getUser_id());
 
         }
@@ -475,13 +444,11 @@ userSingleTone=UserSingleTone.getInstance();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ListenNotificationBeDriver(BeDriverModel beDriverModel)
-    {
+    public void ListenNotificationBeDriver(BeDriverModel beDriverModel) {
 
-        if (beDriverModel.getAction_status().equals("2"))
-        {
+        if (beDriverModel.getAction_status().equals("2")) {
             getUserDataById(userModel.getData().getUser_id());
-            
+
         }
 
 
@@ -489,74 +456,65 @@ userSingleTone=UserSingleTone.getInstance();
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ListenNotificationDriverUpdate(final FollowModel followModel)
-    {
+    public void ListenNotificationDriverUpdate(final FollowModel followModel) {
 
-       if (fragment_map_follow_order!=null&&fragment_map_follow_order.isAdded())
-       {
-           new Handler()
-                   .postDelayed(new Runnable() {
-                       @Override
-                       public void run() {
-                           fragment_map_follow_order.getFollowData();
-                       }
-                   },10);
-       }
+        if (fragment_map_follow_order != null && fragment_map_follow_order.isAdded()) {
+            new Handler()
+                    .postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fragment_map_follow_order.getFollowData();
+                        }
+                    }, 10);
+        }
 
 
     }
 
-    public void checkUserAvailability()
-    {
+    public void checkUserAvailability() {
 
-        if (userModel!=null)
-        {
+        if (userModel != null) {
             getUserDataById(userModel.getData().getUser_id());
 
         }
 
     }
 
-    private void getUserDataById(final String user_id)
-    {
-        Log.e("000dsdsd","sdsdsdsdsdsds");
+    private void getUserDataById(final String user_id) {
+        Log.e("000dsdsd", "sdsdsdsdsdsds");
         Api.getService(Tags.base_url)
                 .getUserDataById(user_id)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                        if (response.isSuccessful()&&response.body()!=null)
-                        {
+                        if (response.isSuccessful() && response.body() != null) {
                             userModel = response.body();
-                            if (userModel.getData().getAvailable().equals("0"))
-                            {
+                            if (userModel.getData().getAvailable().equals("0")) {
 
                                 deleteUser(user_id);
 
-                                Log.e("user_ashow",userModel.getData().getUser_show()+"_");
-                            }else if (userModel.getData().getUser_show().equals("2"))
-                                {
+                                Log.e("user_ashow", userModel.getData().getUser_show() + "_");
+                            } else if (userModel.getData().getUser_show().equals("2")) {
 
-                                    userSingleTone.clear(ClientHomeActivity.this);
-                                    Intent intent = new Intent(ClientHomeActivity.this, SignInActivity.class);
-                                    intent.putExtra("available",2);
-                                    startActivity(intent);
-                                    finish();
-                                    if (current_lang.equals("ar")) {
-                                        overridePendingTransition(R.anim.from_left, R.anim.to_right);
-
-
-                                    } else {
-                                        overridePendingTransition(R.anim.from_right, R.anim.to_left);
+                                userSingleTone.clear(ClientHomeActivity.this);
+                                Intent intent = new Intent(ClientHomeActivity.this, SignInActivity.class);
+                                intent.putExtra("available", 2);
+                                startActivity(intent);
+                                finish();
+                                if (current_lang.equals("ar")) {
+                                    overridePendingTransition(R.anim.from_left, R.anim.to_right);
 
 
-                                    }
+                                } else {
+                                    overridePendingTransition(R.anim.from_right, R.anim.to_left);
 
-                                }else
-                                    {
-                                        updateUserData(response.body());
 
-                                    }
+                                }
+
+                            } else {
+                                updateUserData(response.body());
+
+                            }
 
                         }
                     }
@@ -564,15 +522,16 @@ userSingleTone=UserSingleTone.getInstance();
                     @Override
                     public void onFailure(Call<UserModel> call, Throwable t) {
                         try {
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
 
     private void deleteUser(String user_id) {
 
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -583,11 +542,10 @@ userSingleTone=UserSingleTone.getInstance();
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()&&response.body()!=null)
-                        {
+                        if (response.isSuccessful() && response.body() != null) {
                             userSingleTone.clear(ClientHomeActivity.this);
                             Intent intent = new Intent(ClientHomeActivity.this, SignInActivity.class);
-                            intent.putExtra("available",1);
+                            intent.putExtra("available", 1);
                             startActivity(intent);
                             finish();
                             if (current_lang.equals("ar")) {
@@ -600,24 +558,24 @@ userSingleTone=UserSingleTone.getInstance();
 
                             }
 
-                        }else
-                            {
-                                try {
-                                    Log.e("error_code",response.code()+"__"+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-
-                                Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+
+
+                            Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
 
@@ -638,105 +596,98 @@ userSingleTone=UserSingleTone.getInstance();
     }
 
     //////////////////////////////////////////////////
-    private void UpdateUserLocation(Location location)
-    {
+    private void UpdateUserLocation(Location location) {
         Api.getService(Tags.base_url)
-                .updateLocation(userModel.getData().getUser_id(),location.getLatitude(),location.getLongitude())
+                .updateLocation(userModel.getData().getUser_id(), location.getLatitude(), location.getLongitude())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful())
-                        {
-                            Log.e("Success","Location_updated");
+                        if (response.isSuccessful()) {
+                            Log.e("Success", "Location_updated");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
-    private void addVisit(final String timeNow)
-    {
+
+    private void addVisit(final String timeNow) {
 
         Api.getService(Tags.base_url)
-                .updateVisit("android",timeNow)
+                .updateVisit("android", timeNow)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful())
-                        {
-                            preferences.saveVisitTime(ClientHomeActivity.this,timeNow);
-                        }else
-                            {
-                                try {
-                                    Log.e("error_code",response.code()+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                        if (response.isSuccessful()) {
+                            preferences.saveVisitTime(ClientHomeActivity.this, timeNow);
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
 
     }
-    private void getNotificationCount()
-    {
+
+    private void getNotificationCount() {
         Api.getService(Tags.base_url)
-                .getNotificationCount(userModel.getData().getUser_id(),"count_unread")
+                .getNotificationCount(userModel.getData().getUser_id(), "count_unread")
                 .enqueue(new Callback<NotificationCountModel>() {
                     @Override
                     public void onResponse(Call<NotificationCountModel> call, Response<NotificationCountModel> response) {
-                        if (response.isSuccessful())
-                        {
-                            if (response.body()!=null)
-                            {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
                                 updateNotificationCount(response.body().getCount_unread());
                             }
 
-                        }else
-                            {
-                                try {
-                                    Log.e("Error_code",response.code()+"_"+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                        } else {
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<NotificationCountModel> call, Throwable t) {
-                        try
-                        {
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                        try {
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
-    private void readNotification()
-    {
-        if (canRead){
+
+    private void readNotification() {
+        if (canRead) {
             Api.getService(Tags.base_url)
-                    .readNotification(userModel.getData().getUser_id(),"read_alert")
+                    .readNotification(userModel.getData().getUser_id(), "read_alert")
                     .enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful())
-                            {
+                            if (response.isSuccessful()) {
                                 updateNotificationCount(0);
-                            }else
-                            {
+                            } else {
                                 try {
-                                    Log.e("Error_code",response.code()+"_"+response.errorBody().string());
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -745,68 +696,63 @@ userSingleTone=UserSingleTone.getInstance();
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            try
-                            {
-                                Log.e("Error",t.getMessage());
-                            }catch (Exception e){}
+                            try {
+                                Log.e("Error", t.getMessage());
+                            } catch (Exception e) {
+                            }
                         }
                     });
         }
 
     }
-    private void updateNotificationCount(final int count)
-    {
 
-        if (count>0){
+    private void updateNotificationCount(final int count) {
+
+        if (count > 0) {
             canRead = true;
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (fragment_home!=null&&fragment_home.isAdded())
-                            {
+                            if (fragment_home != null && fragment_home.isAdded()) {
                                 fragment_home.updateNotificationCount(count);
                             }
                         }
-                    },1);
-        }else
-            {
-                new Handler()
-                        .postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (fragment_home!=null&&fragment_home.isAdded())
-                                {
-                                    fragment_home.updateNotificationCount(0);
-                                }
+                    }, 1);
+        } else {
+            new Handler()
+                    .postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (fragment_home != null && fragment_home.isAdded()) {
+                                fragment_home.updateNotificationCount(0);
                             }
-                        },1);
-            }
+                        }
+                    }, 1);
+        }
     }
+
     ///////////////////////////////////
-    public void updateUserData(final UserModel userModel)
-    {
+    public void updateUserData(final UserModel userModel) {
 
 
-
-        preferences.create_update_userData(this,userModel);
+        preferences.create_update_userData(this, userModel);
         userSingleTone.setUserModel(userModel);
         this.userModel = userModel;
-        if (fragment_client_profile!=null && fragment_client_profile.isAdded())
-        {
+        if (fragment_client_profile != null && fragment_client_profile.isAdded()) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             fragment_client_profile.updateUI(userModel);
                         }
-                    },1);
+                    }, 1);
         }
     }
+
     ///////////////////////////////////
-    public void DisplayFragmentHome()
-    {
-        fragment_count+=1;
+    public void DisplayFragmentHome() {
+        fragment_count += 1;
         if (fragment_home == null) {
             fragment_home = Fragment_Home.newInstance();
         }
@@ -821,8 +767,8 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentStore()
-    {
+
+    public void DisplayFragmentStore() {
         if (fragment_home != null && fragment_home.isAdded()) {
             fragment_home.updateBottomNavigationPosition(0);
         }
@@ -849,8 +795,8 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentMyOrders(int refresh_pos)
-    {
+
+    public void DisplayFragmentMyOrders(int refresh_pos) {
         if (fragment_home != null && fragment_home.isAdded()) {
             fragment_home.updateBottomNavigationPosition(1);
         }
@@ -877,8 +823,7 @@ userSingleTone=UserSingleTone.getInstance();
             fragmentManager.beginTransaction().add(R.id.fragment_home_container, fragment_client_orders, "fragment_client_orders").addToBackStack("fragment_client_orders").commit();
         }
 
-        switch (refresh_pos)
-        {
+        switch (refresh_pos) {
             case 0:
                 fragment_client_orders.NavigateToFragmentRefresh(0);
 
@@ -894,8 +839,8 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentNotification()
-    {
+
+    public void DisplayFragmentNotification() {
         readNotification();
 
         if (fragment_home != null && fragment_home.isAdded()) {
@@ -924,8 +869,8 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentProfile()
-    {
+
+    public void DisplayFragmentProfile() {
         if (fragment_home != null && fragment_home.isAdded()) {
             fragment_home.updateBottomNavigationPosition(3);
         }
@@ -952,9 +897,9 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentAddCoupon()
-    {
-        fragment_count+=1;
+
+    public void DisplayFragmentAddCoupon() {
+        fragment_count += 1;
 
         fragment_add_coupon = Fragment_Add_Coupon.newInstance();
 
@@ -967,10 +912,10 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
     }
-    public void DisplayFragmentPhone()
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentPhone() {
+
+        fragment_count += 1;
         fragment_phone = Fragment_Phone.newInstance("edit_profile");
 
         if (fragment_phone.isAdded()) {
@@ -981,17 +926,14 @@ userSingleTone=UserSingleTone.getInstance();
         }
 
 
-
     }
-    public void DisplayFragmentSearch()
-    {
 
-        if (location!=null)
-        {
-            fragment_count+=1;
+    public void DisplayFragmentSearch() {
 
-            fragment_search = Fragment_Search.newInstance(location.getLatitude(),location.getLongitude());
+        if (location != null) {
+            fragment_count += 1;
 
+            fragment_search = Fragment_Search.newInstance(location.getLatitude(), location.getLongitude());
 
 
             if (fragment_search.isAdded()) {
@@ -1004,73 +946,64 @@ userSingleTone=UserSingleTone.getInstance();
 
 
     }
-    public void DisplayFragmentSettings()
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentSettings() {
+
+        fragment_count += 1;
         fragment_settings = Fragment_Settings.newInstance();
 
 
+        if (fragment_settings.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_settings).commit();
 
-            if (fragment_settings.isAdded()) {
-                fragmentManager.beginTransaction().show(fragment_settings).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_settings, "fragment_settings").addToBackStack("fragment_settings").commit();
+        }
 
+
+    }
+
+    public void DisplayFragmentReserveOrder(PlaceModel placeModel, PlaceDetailsModel.PlaceDetails placeDetails) {
+
+        try {
+
+
+            if (userModel == null) {
+                Common.CreateUserNotSignInAlertDialog(this);
             } else {
-                fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_settings, "fragment_settings").addToBackStack("fragment_settings").commit();
-            }
+                if (userModel.getData().getUser_type().equals(Tags.TYPE_DELEGATE)) {
+                    Common.CreateSignAlertDialog(this, getString(R.string.serv_aval_client));
+                } else {
+                    fragment_count += 1;
 
+                    fragment_reserve_order = Fragment_Reserve_Order.newInstance(placeModel, placeDetails);
+
+                    if (fragment_reserve_order.isAdded()) {
+                        fragmentManager.beginTransaction().show(fragment_reserve_order).commit();
+
+                    } else {
+                        fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_reserve_order, "fragment_reserve_order").addToBackStack("fragment_reserve_order").commit();
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+
+        }
 
 
     }
-    public void DisplayFragmentReserveOrder(PlaceModel placeModel, PlaceDetailsModel.PlaceDetails placeDetails)
-    {
 
-try {
+    public void DisplayFragmentMap(String from) {
+        fragment_count += 1;
 
+        if (location != null) {
+            fragment_map = Fragment_Map.newInstance(location.getLatitude(), location.getLongitude(), from);
 
-        if (userModel==null)
-        {
-            Common.CreateUserNotSignInAlertDialog(this);
-        }else
-            {
-                if (userModel.getData().getUser_type().equals(Tags.TYPE_DELEGATE))
-                {
-                    Common.CreateSignAlertDialog(this,getString(R.string.serv_aval_client));
-                }else
-                    {
-                        fragment_count+=1;
+        } else {
+            fragment_map = Fragment_Map.newInstance(0.0, 0.0, from);
 
-                        fragment_reserve_order = Fragment_Reserve_Order.newInstance(placeModel,placeDetails);
-
-                        if (fragment_reserve_order.isAdded()) {
-                            fragmentManager.beginTransaction().show(fragment_reserve_order).commit();
-
-                        } else {
-                            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_reserve_order, "fragment_reserve_order").addToBackStack("fragment_reserve_order").commit();
-                        }
-
-                    }
-                    }}catch (Exception e){
-
-                    }
-
-
-
-
-    }
-    public void DisplayFragmentMap(String from)
-    {
-        fragment_count+=1;
-
-        if (location!=null)
-        {
-            fragment_map = Fragment_Map.newInstance(location.getLatitude(),location.getLongitude(),from);
-
-        }else
-            {
-                fragment_map = Fragment_Map.newInstance(0.0,0.0,from);
-
-            }
+        }
 
         if (fragment_map.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_map).commit();
@@ -1080,12 +1013,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentEditProfile()
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentEditProfile() {
+
+        fragment_count += 1;
         fragment_edit_profile = Fragment_Edit_Profile.newInstance(this.userModel);
 
 
@@ -1097,16 +1029,14 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentStoreDetails(PlaceModel placeModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentStoreDetails(PlaceModel placeModel) {
+
+        fragment_count += 1;
 
 
-
-        fragment_store_details = Fragment_Store_Details.newInstance(placeModel,location.getLatitude(),location.getLongitude());
+        fragment_store_details = Fragment_Store_Details.newInstance(placeModel, location.getLatitude(), location.getLongitude());
 
         if (fragment_store_details.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_store_details).commit();
@@ -1116,32 +1046,30 @@ try {
         }
 
     }
-    public void getAddressFromMapListener(final Favourite_location favourite_location, String from)
-    {
 
-        if (from.equals("fragment_reserve_order"))
-        {
-            if (fragment_reserve_order!=null&&fragment_reserve_order.isAdded())
-            {
+    public void getAddressFromMapListener(final Favourite_location favourite_location, String from) {
+
+        if (from.equals("fragment_reserve_order")) {
+            if (fragment_reserve_order != null && fragment_reserve_order.isAdded()) {
                 new Handler()
                         .postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 fragment_reserve_order.updateSelectedLocation(favourite_location);
                                 fragmentManager.popBackStack("fragment_map", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                fragment_count-=1;
+                                fragment_count -= 1;
                             }
-                        },1);
+                        }, 1);
             }
         }
 
 
     }
-    public void DisplayFragmentDelegates(double place_lat, double place_lng, String type, String client_id, String order_id)
-    {
-        fragment_count+=1;
+
+    public void DisplayFragmentDelegates(double place_lat, double place_lng, String type, String client_id, String order_id) {
+        fragment_count += 1;
         if (fragment_delegates == null) {
-            fragment_delegates = Fragment_Delegates.newInstance(place_lat,place_lng,type,order_id,client_id);
+            fragment_delegates = Fragment_Delegates.newInstance(place_lat, place_lng, type, order_id, client_id);
         }
 
         if (fragment_delegates.isAdded()) {
@@ -1153,9 +1081,9 @@ try {
         }
 
     }
-    public void DisplayFragmentDelegatesResult(NotificationModel notificationModel)
-    {
-        fragment_count+=1;
+
+    public void DisplayFragmentDelegatesResult(NotificationModel notificationModel) {
+        fragment_count += 1;
 
         fragment_delegates_result = Fragment_Delegates_Result.newInstance(notificationModel);
 
@@ -1169,38 +1097,32 @@ try {
         }
 
     }
-    public void DisplayFragmentRegisterDelegate()
-    {
 
-        if (userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT))
-        {
-            fragment_count+=1;
+    public void DisplayFragmentRegisterDelegate() {
+
+        if (userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT)) {
+            fragment_count += 1;
 
             fragment_delegate_register = Fragment_Delegate_Register.newInstance();
 
 
-
-            if (fragment_delegate_register.isAdded())
-            {
+            if (fragment_delegate_register.isAdded()) {
                 fragmentManager.beginTransaction().show(fragment_delegate_register).commit();
 
-            }else
-                {
-                    fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_delegate_register, "fragment_delegate_register").addToBackStack("fragment_delegate_register").commit();
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_delegate_register, "fragment_delegate_register").addToBackStack("fragment_delegate_register").commit();
 
-                }
-        }else
-            {
-                Common.CreateSignAlertDialog(this,getString(R.string.already_courier));
             }
-
+        } else {
+            Common.CreateSignAlertDialog(this, getString(R.string.already_courier));
+        }
 
 
     }
-    public void DisplayFragmentDelegateAddOffer(OrderDataModel.OrderModel orderModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentDelegateAddOffer(OrderDataModel.OrderModel orderModel) {
+
+        fragment_count += 1;
         fragment_delegate_add_offer = Fragment_Delegate_Add_Offer.newInstance(orderModel);
 
         if (fragment_delegate_add_offer.isAdded()) {
@@ -1211,12 +1133,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentClientOrderDetails(OrderDataModel.OrderModel orderModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentClientOrderDetails(OrderDataModel.OrderModel orderModel) {
+
+        fragment_count += 1;
         fragment_client_order_details = Fragment_Client_Order_Details.newInstance(orderModel);
 
         if (fragment_client_order_details.isAdded()) {
@@ -1227,12 +1148,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentClientDelegateOffer(NotificationModel notificationModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentClientDelegateOffer(NotificationModel notificationModel) {
+
+        fragment_count += 1;
         fragment_client_delegate_offer = Fragment_Client_Delegate_Offer.newInstance(notificationModel);
 
         if (fragment_client_delegate_offer.isAdded()) {
@@ -1243,12 +1163,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentDelegateComment()
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentDelegateComment() {
+
+        fragment_count += 1;
         fragment_delegate_comments = Fragment_Delegate_Comments.newInstance();
 
         if (fragment_delegate_comments.isAdded()) {
@@ -1259,12 +1178,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentDelegateCurrentOrderDetails(OrderDataModel.OrderModel orderModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentDelegateCurrentOrderDetails(OrderDataModel.OrderModel orderModel) {
+
+        fragment_count += 1;
         fragment_delegate_current_order_details = Fragment_Delegate_Current_Order_Details.newInstance(orderModel);
 
         if (fragment_delegate_current_order_details.isAdded()) {
@@ -1275,14 +1193,12 @@ try {
         }
 
 
-
     }
 
-    public void DisplayFragmentMapLocationDetails(double place_lat, double place_lng, double client_lat, double client_lng, String address)
-    {
+    public void DisplayFragmentMapLocationDetails(double place_lat, double place_lng, double client_lat, double client_lng, String address) {
 
-        fragment_count+=1;
-        fragment_map_location_details = Fragment_Map_Location_Details.newInstance(place_lat,place_lng,client_lat,client_lng,address);
+        fragment_count += 1;
+        fragment_map_location_details = Fragment_Map_Location_Details.newInstance(place_lat, place_lng, client_lat, client_lng, address);
 
         if (fragment_map_location_details.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_map_location_details).commit();
@@ -1292,12 +1208,11 @@ try {
         }
 
 
-
     }
-    public void DisplayFragmentMapFollowOrder(OrderDataModel.OrderModel orderModel)
-    {
 
-        fragment_count+=1;
+    public void DisplayFragmentMapFollowOrder(OrderDataModel.OrderModel orderModel) {
+
+        fragment_count += 1;
         fragment_map_follow_order = Fragment_Map_Follow_Order.newInstance(orderModel);
 
         if (fragment_map_follow_order.isAdded()) {
@@ -1308,12 +1223,10 @@ try {
         }
 
 
-
     }
 
-    public void DisplayFragmentExplainCourier()
-    {
-        fragment_count+=1;
+    public void DisplayFragmentExplainCourier() {
+        fragment_count += 1;
 
         fragment_explain_courier = Fragment_Explain_Courier.newInstance();
 
@@ -1327,12 +1240,10 @@ try {
 
     }
 
-    public void DisplayFragmentDocumentation()
-    {
+    public void DisplayFragmentDocumentation() {
 
-        if (userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT))
-        {
-            fragment_count+=1;
+        if (userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT)) {
+            fragment_count += 1;
 
             fragment_documentation_data = Fragment_Documentation_Data.newInstance();
 
@@ -1344,18 +1255,16 @@ try {
                 fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_documentation_data, "fragment_documentation_data").addToBackStack("fragment_documentation_data").commit();
             }
 
-        }else
-        {
-            Common.CreateSignAlertDialog(this,getString(R.string.already_courier));
+        } else {
+            Common.CreateSignAlertDialog(this, getString(R.string.already_courier));
         }
 
 
     }
 
-    public void DisplayFragmentBankAccount()
-    {
+    public void DisplayFragmentBankAccount() {
 
-        fragment_count+=1;
+        fragment_count += 1;
 
         fragment_bank_account = Fragment_Bank_Account.newInstance();
 
@@ -1370,91 +1279,83 @@ try {
     }
 
     // from fragment coupon
-    public void updateUserDataProfile(UserModel userModel)
-    {
-        if (fragment_reserve_order!=null&&fragment_reserve_order.isAdded())
-        {
+    public void updateUserDataProfile(UserModel userModel) {
+        if (fragment_reserve_order != null && fragment_reserve_order.isAdded()) {
             fragment_reserve_order.updateUserData(userModel);
         }
-        if (fragment_client_profile!=null&&fragment_client_profile.isAdded())
-        {
+        if (fragment_client_profile != null && fragment_client_profile.isAdded()) {
             fragment_client_profile.updateUserData(userModel);
         }
     }
 
-    public void NavigateToChatActivity(ChatUserModel chatUserModel, String from)
-    {
+    public void NavigateToChatActivity(ChatUserModel chatUserModel, String from) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("data",chatUserModel);
-        intent.putExtra("from",from);
+        intent.putExtra("data", chatUserModel);
+        intent.putExtra("from", from);
         startActivity(intent);
     }
-    public void delegateAcceptOrder(String driver_id, String client_id, String order_id, String driver_offer)
-    {
 
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void delegateAcceptOrder(String driver_id, String client_id, String order_id, String driver_offer) {
+
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .delegateAccept(driver_id,client_id,order_id,"accept",driver_offer)
+                .delegateAccept(driver_id, client_id, order_id, "accept", driver_offer)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful())
-                        {
-                            fragment_count-=1;
+                        if (response.isSuccessful()) {
+                            fragment_count -= 1;
                             ClientHomeActivity.super.onBackPressed();
                             Toast.makeText(ClientHomeActivity.this, R.string.accepted, Toast.LENGTH_SHORT).show();
                             RefreshFragment_Order();
                             RefreshFragment_Notification();
-                        }else
-                            {
-                                dialog.dismiss();
-                                Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-                                try {
-                                    Log.e("error_code",response.code()+""+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            try {
+                                Log.e("error_code", response.code() + "" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
-    public void delegateRefuse_FinishOrder(String driver_id, String client_id, String order_id, final String type)
-    {
 
-        final ProgressDialog progressDialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void delegateRefuse_FinishOrder(String driver_id, String client_id, String order_id, final String type) {
+
+        final ProgressDialog progressDialog = Common.createProgressDialog(this, getString(R.string.wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
         Api.getService(Tags.base_url)
-                .delegateRefuse_Finish(driver_id,client_id,order_id,type)
+                .delegateRefuse_Finish(driver_id, client_id, order_id, type)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         progressDialog.dismiss();
-                        if (response.isSuccessful())
-                        {
-                            fragment_count-=1;
+                        if (response.isSuccessful()) {
+                            fragment_count -= 1;
                             ClientHomeActivity.super.onBackPressed();
-                            if (type.equals("refuse"))
-                            {
-                                Toast.makeText(ClientHomeActivity.this,getString(R.string.refused), Toast.LENGTH_SHORT).show();
+                            if (type.equals("refuse")) {
+                                Toast.makeText(ClientHomeActivity.this, getString(R.string.refused), Toast.LENGTH_SHORT).show();
                                 RefreshFragment_Order();
                                 RefreshFragment_Notification();
-                            }else if (type.equals("end"))
-                            {
+                            } else if (type.equals("end")) {
                                 ClientHomeActivity.super.onBackPressed();
-                                fragment_count-=1;
-                                Toast.makeText(ClientHomeActivity.this,getString(R.string.done), Toast.LENGTH_SHORT).show();
+                                fragment_count -= 1;
+                                Toast.makeText(ClientHomeActivity.this, getString(R.string.done), Toast.LENGTH_SHORT).show();
                                 DisplayFragmentMyOrders(2);
                                 RefreshFragment_Order();
 
@@ -1465,15 +1366,14 @@ try {
                                                 getUserDataById(userModel.getData().getUser_id());
 
                                             }
-                                        },1000);
+                                        }, 1000);
                             }
 
-                        }else
-                        {
+                        } else {
                             progressDialog.dismiss();
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             try {
-                                Log.e("error_code",response.code()+""+response.errorBody().string());
+                                Log.e("error_code", response.code() + "" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -1484,43 +1384,41 @@ try {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             progressDialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
-    // from dialog or fragment delegate result
-    public void clientAcceptOffer(final String driver_id, final String client_id, final String order_id, final String type, String driver_offer, final String from)
-    {
 
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    // from dialog or fragment delegate result
+    public void clientAcceptOffer(final String driver_id, final String client_id, final String order_id, final String type, String driver_offer, final String from) {
+
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .clientAccept_Refuse(client_id,driver_id,order_id,driver_offer,type)
+                .clientAccept_Refuse(client_id, driver_id, order_id, driver_offer, type)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful())
-                        {
-                            if (from.equals("fragment_delegate_result"))
-                            {
-                                fragment_count-=1;
+                        if (response.isSuccessful()) {
+                            if (from.equals("fragment_delegate_result")) {
+                                fragment_count -= 1;
                                 ClientHomeActivity.super.onBackPressed();
                             }
 
-                            Toast.makeText(ClientHomeActivity.this,getString(R.string.accepted), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClientHomeActivity.this, getString(R.string.accepted), Toast.LENGTH_SHORT).show();
 
                             RefreshFragment_Notification();
                             RefreshFragment_Order();
 
-                        }else
-                        {
+                        } else {
                             dialog.dismiss();
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             try {
-                                Log.e("error_code",response.code()+""+response.errorBody().string());
+                                Log.e("error_code", response.code() + "" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -1531,16 +1429,16 @@ try {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
 
-    public void clientRefuseOffer(final String id_notification)
-    {
+    public void clientRefuseOffer(final String id_notification) {
 
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
@@ -1549,17 +1447,15 @@ try {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful())
-                        {
+                        if (response.isSuccessful()) {
                             RefreshFragment_Notification();
                             RefreshFragment_Order();
 
-                        }else
-                        {
+                        } else {
                             dialog.dismiss();
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             try {
-                                Log.e("error_code",response.code()+""+response.errorBody().string());
+                                Log.e("error_code", response.code() + "" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -1570,15 +1466,16 @@ try {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
-    public void clientCancelOrder(String order_id)
-    {
-        Log.e("order_id",order_id+"__");
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+
+    public void clientCancelOrder(String order_id) {
+        Log.e("order_id", order_id + "__");
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
@@ -1587,21 +1484,19 @@ try {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful())
-                        {
+                        if (response.isSuccessful()) {
 
-                            fragment_count-=1;
+                            fragment_count -= 1;
                             ClientHomeActivity.super.onBackPressed();
                             RefreshFragment_Notification();
                             RefreshFragment_Order();
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.order_cancel), Toast.LENGTH_SHORT).show();
 
-                        }else
-                        {
+                        } else {
                             dialog.dismiss();
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             try {
-                                Log.e("error_code",response.code()+""+response.errorBody().string());
+                                Log.e("error_code", response.code() + "" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -1612,48 +1507,42 @@ try {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
     }
 
 
-
-    public void setDelegate_id(final String delegate_id, String client_id, String order_id, String type)
-    {
-        if (type.equals("reserve_order"))
-        {
-            if (fragment_reserve_order!=null&&fragment_reserve_order.isAdded())
-            {
+    public void setDelegate_id(final String delegate_id, String client_id, String order_id, String type) {
+        if (type.equals("reserve_order")) {
+            if (fragment_reserve_order != null && fragment_reserve_order.isAdded()) {
                 new Handler()
                         .postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 ClientHomeActivity.super.onBackPressed();
-                                fragment_count-=1;
+                                fragment_count -= 1;
                                 //fragment_reserve_order.sendOrder(delegate_id);
                                 RefreshFragment_Notification();
                             }
-                        },1);
+                        }, 1);
             }
-        }else
-        if (type.equals("resend_order"))
-        {
+        } else if (type.equals("resend_order")) {
             ClientHomeActivity.super.onBackPressed();
-            fragment_count-=1;
-           // ResendOrder(client_id,delegate_id,order_id);
-        }else if (type.equals("reserve_shipment"))
-        {
+            fragment_count -= 1;
+            // ResendOrder(client_id,delegate_id,order_id);
+        } else if (type.equals("reserve_shipment")) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             ClientHomeActivity.super.onBackPressed();
-                            fragment_count-=1;
+                            fragment_count -= 1;
                             //fragment_shipment.sendOrder(delegate_id);
                         }
-                    },1);
+                    }, 1);
         }
 
 
@@ -1741,51 +1630,47 @@ try {
 */
 
     //from fragment reserve order
-    public void FollowOrder()
-    {
+    public void FollowOrder() {
         super.onBackPressed();
         super.onBackPressed();
 
-        fragment_count-=2;
+        fragment_count -= 2;
 
         DisplayFragmentMyOrders(0);
 
 
     }
 
-    public void FollowOrderFromShipment()
-    {
+    public void FollowOrderFromShipment() {
 
         DisplayFragmentMyOrders(0);
 
     }
 
-    public void registerDelegate(String national_id, String address, Uri image_national_id, Uri image_license, Uri image_front_uri, Uri image_behind_uri)
-    {
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void registerDelegate(String national_id, String address, Uri image_national_id, Uri image_license, Uri image_front_uri, Uri image_behind_uri) {
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.show();
-        RequestBody user_id_part =Common.getRequestBodyText(userModel.getData().getUser_id());
-        RequestBody national_id_part =Common.getRequestBodyText(national_id);
-        RequestBody address_part =Common.getRequestBodyText(address);
-        MultipartBody.Part image_national_id_part = Common.getMultiPart(this,image_national_id,"user_card_id_image");
-        MultipartBody.Part image_license_part = Common.getMultiPart(this,image_license,"user_driving_license");
+        RequestBody user_id_part = Common.getRequestBodyText(userModel.getData().getUser_id());
+        RequestBody national_id_part = Common.getRequestBodyText(national_id);
+        RequestBody address_part = Common.getRequestBodyText(address);
+        MultipartBody.Part image_national_id_part = Common.getMultiPart(this, image_national_id, "user_card_id_image");
+        MultipartBody.Part image_license_part = Common.getMultiPart(this, image_license, "user_driving_license");
 
-        MultipartBody.Part image_front_part = Common.getMultiPart(this,image_national_id,"image_car_front");
-        MultipartBody.Part image_back_part = Common.getMultiPart(this,image_license,"image_car_back");
+        MultipartBody.Part image_front_part = Common.getMultiPart(this, image_national_id, "image_car_front");
+        MultipartBody.Part image_back_part = Common.getMultiPart(this, image_license, "image_car_back");
 
 
         Api.getService(Tags.base_url)
-                .registerDelegate(user_id_part,national_id_part,address_part,image_national_id_part,image_license_part,image_front_part,image_back_part)
+                .registerDelegate(user_id_part, national_id_part, address_part, image_national_id_part, image_license_part, image_front_part, image_back_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, final Response<UserModel> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful()&&response.body()!=null&&response.body().getData()!=null)
-                        {
+                        if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (fragment_client_profile!=null&&fragment_client_profile.isAdded()) {
+                                    if (fragment_client_profile != null && fragment_client_profile.isAdded()) {
                                         fragment_client_profile.updateUserData(response.body());
                                         ClientHomeActivity.this.userModel = response.body();
                                         userSingleTone.setUserModel(response.body());
@@ -1795,25 +1680,23 @@ try {
                                                 .postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Common.CreateSuccessDialog(ClientHomeActivity.this,getString(R.string.succ_be_courier));
+                                                        Common.CreateSuccessDialog(ClientHomeActivity.this, getString(R.string.succ_be_courier));
 
                                                     }
-                                                },1000);
+                                                }, 1000);
                                     }
                                 }
-                            },1);
-                        }else if (response.code() == 406)
-                        {
+                            }, 1);
+                        } else if (response.code() == 406) {
                             Toast.makeText(ClientHomeActivity.this, getString(R.string.req_sent), Toast.LENGTH_LONG).show();
-                        }else
-                            {
-                                try {
-                                    Log.e("Error_code",response.code()+""+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                        } else {
+                            try {
+                                Log.e("Error_code", response.code() + "" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                            Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -1821,8 +1704,9 @@ try {
                         try {
                             dialog.dismiss();
                             Toast.makeText(ClientHomeActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
                     }
                 });
 
@@ -1830,38 +1714,34 @@ try {
     }
 
     // from fragment phone
-    public void setPhoneData(String code, String country_code, String phone)
-    {
-        if (fragment_edit_profile!=null&&fragment_edit_profile.isAdded())
-        {
-            fragment_edit_profile.updatePhoneData(country_code,code,phone);
-            fragment_count-=1;
+    public void setPhoneData(String code, String country_code, String phone) {
+        if (fragment_edit_profile != null && fragment_edit_profile.isAdded()) {
+            fragment_edit_profile.updatePhoneData(country_code, code, phone);
+            fragment_count -= 1;
             super.onBackPressed();
         }
     }
+
     //from pending fragment to fragment store details
-    public void AddWaitOrderCount(int order_counter)
-    {
+    public void AddWaitOrderCount(int order_counter) {
         fragment_store_details.AddCounter(order_counter);
     }
 
     public void UpdateOrderMovement(final String client_id, final String driver_id, final String order_id, int order_movement) {
 
 
-        if (order_movement == Tags.STATE_CLIENT_ACCEPT_OFFER)
-        {
-            final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        if (order_movement == Tags.STATE_CLIENT_ACCEPT_OFFER) {
+            final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
             dialog.setCancelable(false);
             dialog.show();
             state = String.valueOf(Tags.STATE_DELEGATE_COLLECTING_ORDER);
-            call = Api.getService(Tags.base_url).movementDelegate(order_id,state);
+            call = Api.getService(Tags.base_url).movementDelegate(order_id, state);
             // تجميع الطلب
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     dialog.dismiss();
-                    if (response.isSuccessful())
-                    {
+                    if (response.isSuccessful()) {
 
                         fragment_delegate_current_order_details.updateOrderState(Integer.parseInt(state));
 
@@ -1869,11 +1749,10 @@ try {
                         RefreshFragment_Notification();
 
 
-                    }else
-                    {
+                    } else {
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                         try {
-                            Log.e("error_code",response.code()+""+response.errorBody().string());
+                            Log.e("error_code", response.code() + "" + response.errorBody().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -1886,38 +1765,36 @@ try {
                         dialog.dismiss();
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
 
-                        Log.e("Error",t.getMessage());
-                    }catch (Exception e){}
+                        Log.e("Error", t.getMessage());
+                    } catch (Exception e) {
+                    }
                 }
             });
 
-        }else if (order_movement == Tags.STATE_DELEGATE_COLLECTING_ORDER)
-        {
-            final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        } else if (order_movement == Tags.STATE_DELEGATE_COLLECTING_ORDER) {
+            final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
             dialog.setCancelable(false);
             dialog.show();
             state = String.valueOf(Tags.STATE_DELEGATE_COLLECTED_ORDER);
 
-            call = Api.getService(Tags.base_url).movementDelegate(order_id,state);
+            call = Api.getService(Tags.base_url).movementDelegate(order_id, state);
 
             // تم التجميع
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     dialog.dismiss();
-                    if (response.isSuccessful())
-                    {
+                    if (response.isSuccessful()) {
 
                         fragment_delegate_current_order_details.updateOrderState(Integer.parseInt(state));
 
                         RefreshFragment_Order();
                         RefreshFragment_Notification();
 
-                    }else
-                    {
+                    } else {
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                         try {
-                            Log.e("error_code",response.code()+""+response.errorBody().string());
+                            Log.e("error_code", response.code() + "" + response.errorBody().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -1930,35 +1807,32 @@ try {
                         dialog.dismiss();
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
 
-                        Log.e("Error",t.getMessage());
-                    }catch (Exception e){}
+                        Log.e("Error", t.getMessage());
+                    } catch (Exception e) {
+                    }
                 }
             });
 
-        }
-        else if (order_movement == Tags.STATE_DELEGATE_COLLECTED_ORDER)
-        {
-            final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        } else if (order_movement == Tags.STATE_DELEGATE_COLLECTED_ORDER) {
+            final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
             dialog.setCancelable(false);
             dialog.show();
             state = String.valueOf(Tags.STATE_DELEGATE_DELIVERING_ORDER);
 
-            call = Api.getService(Tags.base_url).movementDelegate(order_id,state);
+            call = Api.getService(Tags.base_url).movementDelegate(order_id, state);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     dialog.dismiss();
-                    if (response.isSuccessful())
-                    {
+                    if (response.isSuccessful()) {
 
                         fragment_delegate_current_order_details.updateOrderState(Integer.parseInt(state));
                         RefreshFragment_Order();
                         RefreshFragment_Notification();
-                    }else
-                    {
+                    } else {
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                         try {
-                            Log.e("error_code",response.code()+""+response.errorBody().string());
+                            Log.e("error_code", response.code() + "" + response.errorBody().string());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -1971,15 +1845,14 @@ try {
                         dialog.dismiss();
                         Toast.makeText(ClientHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
 
-                        Log.e("Error",t.getMessage());
-                    }catch (Exception e){}
+                        Log.e("Error", t.getMessage());
+                    } catch (Exception e) {
+                    }
                 }
             });
 
-        }
-        else if (order_movement == Tags.STATE_DELEGATE_DELIVERING_ORDER)
-        {
-            delegateRefuse_FinishOrder(driver_id,client_id,order_id,"end");
+        } else if (order_movement == Tags.STATE_DELEGATE_DELIVERING_ORDER) {
+            delegateRefuse_FinishOrder(driver_id, client_id, order_id, "end");
 
 
         }
@@ -1987,17 +1860,16 @@ try {
 
     }
 
-    public void CreateAddRateAlertDialog(final NotificationModel notificationModel)
-    {
+    public void CreateAddRateAlertDialog(final NotificationModel notificationModel) {
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCancelable(true)
                 .create();
 
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_rate,null);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_rate, null);
         ImageView img_close = view.findViewById(R.id.img_close);
         CircleImageView image = view.findViewById(R.id.image);
         TextView tv_name = view.findViewById(R.id.tv_name);
-        final ImageView image_very_bad= view.findViewById(R.id.image_very_bad);
+        final ImageView image_very_bad = view.findViewById(R.id.image_very_bad);
         final ImageView image_bad = view.findViewById(R.id.image_bad);
         final ImageView image_good = view.findViewById(R.id.image_good);
         final ImageView image_very_good = view.findViewById(R.id.image_very_good);
@@ -2006,10 +1878,8 @@ try {
         final EditText edt_comment = view.findViewById(R.id.edt_comment);
         final TextView tv_rate = view.findViewById(R.id.tv_rate);
         final Button btn_rate = view.findViewById(R.id.btn_rate);
-        Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL+notificationModel.getFrom_user_image())).fit().into(image);
+        Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL + notificationModel.getFrom_user_image())).fit().into(image);
         tv_name.setText(notificationModel.getFrom_user_full_name());
-
-
 
 
         image_excellent.setOnClickListener(new View.OnClickListener() {
@@ -2094,7 +1964,7 @@ try {
             @Override
             public void onClick(View v) {
                 String comment = edt_comment.getText().toString().trim();
-                AddRate(dialog,notificationModel,rate,comment);
+                AddRate(dialog, notificationModel, rate, comment);
             }
         });
 
@@ -2105,7 +1975,7 @@ try {
             }
         });
 
-        dialog.getWindow().getAttributes().windowAnimations=R.style.dialog_congratulation_animation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_window_bg);
         dialog.setView(view);
@@ -2114,27 +1984,25 @@ try {
 
     private void AddRate(final AlertDialog alertDialog, NotificationModel notificationModel, double rate, String comment) {
 
-        final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
 
         Api.getService(Tags.base_url)
-                .addRate(notificationModel.getClient_id(),notificationModel.getDriver_id(),notificationModel.getOrder_id(),rate,"end",comment)
+                .addRate(notificationModel.getClient_id(), notificationModel.getDriver_id(), notificationModel.getOrder_id(), rate, "end", comment)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful())
-                        {
+                        if (response.isSuccessful()) {
 
                             alertDialog.dismiss();
                             dialog.dismiss();
                             RefreshFragment_Notification();
 
-                        }else
-                        {
+                        } else {
                             try {
-                                Log.e("error_code",response.errorBody().string());
+                                Log.e("error_code", response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -2147,89 +2015,81 @@ try {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-                            Log.e("Error",t.getMessage());
-                            Toast.makeText(ClientHomeActivity.this,getString(R.string.something), Toast.LENGTH_SHORT).show();
-                        }catch (Exception re){}
+                            Log.e("Error", t.getMessage());
+                            Toast.makeText(ClientHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                        } catch (Exception re) {
+                        }
                     }
                 });
 
 
-
     }
 
-    private void RefreshFragment_Order()
-    {
-        if (fragment_client_orders!=null&&fragment_client_orders.isAdded())
-        {
+    private void RefreshFragment_Order() {
+        if (fragment_client_orders != null && fragment_client_orders.isAdded()) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                         fragment_client_orders.RefreshOrderFragments();
+                            fragment_client_orders.RefreshOrderFragments();
                         }
-                    },1);
+                    }, 1);
         }
     }
-    private void RefreshFragment_Notification()
-    {
-        if (fragment_client_notifications!=null&&fragment_client_notifications.isAdded())
-        {
+
+    private void RefreshFragment_Notification() {
+        if (fragment_client_notifications != null && fragment_client_notifications.isAdded()) {
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             fragment_client_notifications.getNotification();
                         }
-                    },1);
+                    }, 1);
         }
     }
-    public void RefreshActivity(String lang)
-    {
-        Paper.book().write("lang",lang);
-        Language_Helper.setNewLocale(this,lang);
+
+    public void RefreshActivity(String lang) {
+        Paper.book().write("lang", lang);
+        Language_Helper.setNewLocale(this, lang);
         new Handler()
                 .postDelayed(new Runnable() {
                     @Override
                     public void run() {
 
-                        Intent intent =  getIntent();
+                        Intent intent = getIntent();
                         finish();
                         startActivity(intent);
                     }
-                },1050);
-
+                }, 1050);
 
 
     }
-    public void NavigateToTermsActivity(int type)
-    {
-        Intent intent = new Intent(this, TermsConditionsActivity.class);
-        intent.putExtra("type",type);
-        startActivity(intent);
-        if (current_lang.equals("ar"))
-        {
-            overridePendingTransition(R.anim.from_right,R.anim.to_left);
 
-        }else
-        {
-            overridePendingTransition(R.anim.from_left,R.anim.to_right);
+    public void NavigateToTermsActivity(int type) {
+        Intent intent = new Intent(this, TermsConditionsActivity.class);
+        intent.putExtra("type", type);
+        startActivity(intent);
+        if (current_lang.equals("ar")) {
+            overridePendingTransition(R.anim.from_right, R.anim.to_left);
+
+        } else {
+            overridePendingTransition(R.anim.from_left, R.anim.to_right);
 
         }
 
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<Fragment> fragmentList = fragmentManager.getFragments();
         for (Fragment fragment : fragmentList) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
 
-        if (requestCode == 1255)
-        {
-            if (resultCode == RESULT_OK)
-            {
+        if (requestCode == 1255) {
+            if (resultCode == RESULT_OK) {
                 startLocationUpdate();
             }
         }
@@ -2242,9 +2102,9 @@ try {
             }
         }*/
     }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         List<Fragment> fragmentList = fragmentManager.getFragments();
         for (Fragment fragment : fragmentList) {
@@ -2256,8 +2116,8 @@ try {
             initGoogleApiClient();
         }
     }
-    private void CheckPermission()
-    {
+
+    private void CheckPermission() {
         if (ActivityCompat.checkSelfPermission(this, gps_perm) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{gps_perm}, gps_req);
         } else {
@@ -2275,13 +2135,11 @@ try {
     }
 
 
-
     /////////////////////////////////////////////////////////////////
-    private void intLocationRequest()
-    {
+    private void intLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setFastestInterval(1000*60*2);
-        locationRequest.setInterval(1000*60*2);
+        locationRequest.setFastestInterval(1000 * 60 * 2);
+        locationRequest.setInterval(1000 * 60 * 2);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
         PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
@@ -2291,20 +2149,18 @@ try {
             public void onResult(@NonNull LocationSettingsResult result) {
 
                 Status status = result.getStatus();
-                switch (status.getStatusCode())
-                {
+                switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         startLocationUpdate();
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
-                            status.startResolutionForResult(ClientHomeActivity.this,1255);
-                        }catch (Exception e)
-                        {
+                            status.startResolutionForResult(ClientHomeActivity.this, 1255);
+                        } catch (Exception e) {
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.e("not available","not available");
+                        Log.e("not available", "not available");
                         break;
                 }
             }
@@ -2313,30 +2169,26 @@ try {
     }
 
     @SuppressLint("MissingPermission")
-    private void startLocationUpdate()
-    {
-        locationCallback = new LocationCallback()
-        {
+    private void startLocationUpdate() {
+        locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 onLocationChanged(locationResult.getLastLocation());
             }
         };
         LocationServices.getFusedLocationProviderClient(this)
-                .requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper());
+                .requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle)
-    {
+    public void onConnected(@Nullable Bundle bundle) {
         intLocationRequest();
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        if (googleApiClient!=null)
-        {
+        if (googleApiClient != null) {
             googleApiClient.connect();
         }
     }
@@ -2350,18 +2202,17 @@ try {
     public void onLocationChanged(Location location) {
         LocationListener(location);
     }
+
     /////////////////////////////////////////////////////////////////
-    public void DisplayFragmentHomeView()
-    {
-        if (fragment_home!=null&&fragment_home.isAdded())
-        {
+    public void DisplayFragmentHomeView() {
+        if (fragment_home != null && fragment_home.isAdded()) {
             fragment_home.DisplayFragmentView();
         }
     }
+
     /////////////////////////////////////////////////////////////////
-    public void Logout()
-    {
-        final ProgressDialog dialog =Common.createProgressDialog(this,getString(R.string.wait));
+    public void Logout() {
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.show();
 
         FirebaseInstanceId.getInstance()
@@ -2412,60 +2263,47 @@ try {
                     }
                 });
     }
-    public void Back()
-    {
 
-        if (fragment_count>1)
-        {
+    public void Back() {
+
+        if (fragment_count > 1) {
             super.onBackPressed();
-            fragment_count-=1;
+            fragment_count -= 1;
 
-        }else
-            {
-                if (fragment_client_store!=null&&fragment_client_store.isVisible())
-                {
-                    NavigateToSignInActivity();
-                }else
-                {
-                    DisplayFragmentStore();
-                }
+        } else {
+            if (fragment_client_store != null && fragment_client_store.isVisible()) {
+                NavigateToSignInActivity();
+            } else {
+                DisplayFragmentStore();
             }
+        }
 
 
     }
 
-    public void NavigateToSignInActivity()
-    {
+    public void NavigateToSignInActivity() {
 
-        if (userModel!=null)
-        {
+        if (userModel != null) {
             finish();
-            if (current_lang.equals("ar"))
-            {
-                overridePendingTransition(R.anim.from_left,R.anim.to_right);
+            if (current_lang.equals("ar")) {
+                overridePendingTransition(R.anim.from_left, R.anim.to_right);
 
 
-
-            }else
-            {
-                overridePendingTransition(R.anim.from_right,R.anim.to_left);
+            } else {
+                overridePendingTransition(R.anim.from_right, R.anim.to_left);
 
 
             }
-        }else
-        {
+        } else {
             Intent intent = new Intent(ClientHomeActivity.this, SignInActivity.class);
             startActivity(intent);
             finish();
-            if (current_lang.equals("ar"))
-            {
-                overridePendingTransition(R.anim.from_left,R.anim.to_right);
+            if (current_lang.equals("ar")) {
+                overridePendingTransition(R.anim.from_left, R.anim.to_right);
 
 
-
-            }else
-            {
-                overridePendingTransition(R.anim.from_right,R.anim.to_left);
+            } else {
+                overridePendingTransition(R.anim.from_right, R.anim.to_left);
 
 
             }
@@ -2482,18 +2320,15 @@ try {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (locationCallback!=null)
-        {
+        if (locationCallback != null) {
             LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback);
 
         }
-        if (googleApiClient!=null)
-        {
+        if (googleApiClient != null) {
             googleApiClient.disconnect();
         }
 
-        if (EventBus.getDefault().isRegistered(this))
-        {
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
