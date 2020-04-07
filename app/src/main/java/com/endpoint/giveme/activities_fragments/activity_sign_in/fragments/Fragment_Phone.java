@@ -200,7 +200,8 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
 
                             if (response.code()==401)
                             {
-                                sendSMSCode(phone_code,phone);
+                               // sendSMSCode(phone_code,phone);
+                                ((SignInActivity)activity).signIn(phone,country_code,phone_code);
                                 //((SignInActivity)activity).DisplayFragmentCodeVerification(code.replace("+","00"),phone,country_code);
                             }else
                             {
