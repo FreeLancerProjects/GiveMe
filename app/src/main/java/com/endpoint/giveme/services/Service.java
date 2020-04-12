@@ -91,7 +91,9 @@ public interface Service {
                                        @Field("user_full_name") String user_full_name,
                                        @Field("user_gender") String user_gender,
                                        @Field("user_country") String user_country,
-                                       @Field("user_age") long user_age
+                                       @Field("user_age") long user_age,
+                                       @Field("user_name") String user_name,
+                                       @Field("user_pass") String user_pass
 
     );
 
@@ -105,6 +107,8 @@ public interface Service {
                                     @Part("user_gender") RequestBody user_gender,
                                     @Part("user_country") RequestBody user_country,
                                     @Part("user_age") RequestBody user_age,
+                                    @Part("user_name") RequestBody user_name,
+                                    @Part("user_pass") RequestBody user_pass,
                                     @Part MultipartBody.Part image
     );
 
@@ -120,6 +124,8 @@ public interface Service {
                                                @Part("user_age") RequestBody user_age,
                                                @Part("user_card_id") RequestBody user_card_id,
                                                @Part("user_address") RequestBody user_address,
+                                               @Part("user_name") RequestBody user_name,
+                                               @Part("user_pass") RequestBody user_pass,
                                                @Part MultipartBody.Part user_card_id_image,
                                                @Part MultipartBody.Part user_driving_license,
                                                @Part MultipartBody.Part image_car_front,
@@ -137,6 +143,8 @@ public interface Service {
                                             @Part("user_age") RequestBody user_age,
                                             @Part("user_card_id") RequestBody user_card_id,
                                             @Part("user_address") RequestBody user_address,
+                                            @Part("user_name") RequestBody user_name,
+                                            @Part("user_pass") RequestBody user_pass,
                                             @Part MultipartBody.Part user_card_id_image,
                                             @Part MultipartBody.Part user_driving_license,
                                             @Part MultipartBody.Part image_car_front,
@@ -384,6 +392,11 @@ public interface Service {
     @POST("/Api/logMe")
     Call<UserModel> checkfound(@Field("user_phone_code") String user_phone_code,
                                @Field("user_phone") String user_phone
+    );
+    @FormUrlEncoded
+    @POST("/Api/newLogin")
+    Call<UserModel> login(@Field("user_name") String user_name,
+                               @Field("user_pass") String user_pass
     );
     @FormUrlEncoded
     @POST("/Api/resendSms")

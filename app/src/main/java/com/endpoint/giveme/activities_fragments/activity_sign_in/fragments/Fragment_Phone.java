@@ -48,7 +48,8 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
     private ImageView arrow;
     private LinearLayout ll_country;
     private TextView tv_country,tv_code,tv_note;
-    private EditText edt_phone;
+    //edt_phone
+    private EditText edtname,edtpass;
     private FloatingActionButton fab;
     private FragmentActivity activity;
     private CountryPicker picker;
@@ -57,6 +58,7 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
     private String country_code="sa";
     // from where , access from fragment chooser , fragment edit profile
     private String type;
+    private TextView tv_new;
 
 
     @Nullable
@@ -96,14 +98,22 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
         Paper.init(activity);
         current_language = Paper.book().read("lang", Locale.getDefault().getLanguage());
         arrow = view.findViewById(R.id.arrow);
-        ll_country = view.findViewById(R.id.ll_country);
-        tv_country = view.findViewById(R.id.tv_country);
-        tv_code = view.findViewById(R.id.tv_code);
+//        ll_country = view.findViewById(R.id.ll_country);
+//        tv_country = view.findViewById(R.id.tv_country);
+//        tv_code = view.findViewById(R.id.tv_code);
         tv_note = view.findViewById(R.id.tv_note);
 
-        edt_phone = view.findViewById(R.id.edt_phone);
+    //    edt_phone = view.findViewById(R.id.edt_phone);
+        edtname=view.findViewById(R.id.edtName);
+        edtpass=view.findViewById(R.id.edtPassword);
         fab = view.findViewById(R.id.fab);
-
+tv_new=view.findViewById(R.id.tv_new);
+tv_new.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        ((SignInActivity)activity).DisplayFragmentUserType();
+    }
+});
 
         if (current_language.equals("ar"))
         {
@@ -142,38 +152,92 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
     private void CheckData() {
         String phone_regex = "^[+]?[0-9]{6,}$";
 
-        String phone = edt_phone.getText().toString().trim();
+        String name = edtname.getText().toString().trim();
+String pass=edtpass.getText().toString().trim();
+//        if (phone.startsWith("0"))
+//        {
+//            phone = phone.replaceFirst("0","");
+//        }
 
-        if (phone.startsWith("0"))
-        {
-            phone = phone.replaceFirst("0","");
-        }
-
-        if (!TextUtils.isEmpty(phone) && phone.matches(phone_regex)) {
-            edt_phone.setError(null);
-            Common.CloseKeyBoard(activity, edt_phone);
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(name) &&pass.length()>=6) {
+            edtname.setError(null);
+            edtpass.setError(null);
+            Common.CloseKeyBoard(activity, edtpass);
             if (type.equals("signup"))
             {
 
-                checkFound(code,phone);
+              //  checkFound(code,phone);
                 //sendSMSCode(code,phone);
-                //((SignInActivity)activity).signIn(phone,country_code,code);
-
-            }else if (type.equals("edit_profile"))
-            {
-                ((ClientHomeActivity)activity).setPhoneData(code,country_code,phone);
+              //  ((SignInActivity)activity).signIn(name,pass);
+                signin(name,pass);
             }
+//            else if (type.equals("edit_profile"))
+//            {
+//                ((ClientHomeActivity)activity).setPhoneData(code,country_code,phone);
+//            }
         } else {
-            if (TextUtils.isEmpty(phone)) {
-                edt_phone.setError(getString(R.string.field_req));
-            } else if (!phone.matches(phone_regex)) {
-                edt_phone.setError(getString(R.string.inv_phone));
-            }else
+            if (TextUtils.isEmpty(name)) {
+                edtname.setError(getString(R.string.field_req));
+            } else
                 {
-                    edt_phone.setError(null);
+                    edtname.setError(null);
                 }
+            if (TextUtils.isEmpty(pass)) {
+                edtpass.setError(getString(R.string.field_req));
+            }
+            else   if (pass.length()<6) {
+                edtpass.setError(getString(R.string.password_short));
+            }
+            else
+            {
+                edtpass.setError(null);
+            }
         }
     }
+
+    private void signin(String name, String pass) {
+        final ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .login(name,pass)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+
+
+                        dialog.dismiss();
+
+                        if (response.isSuccessful())
+                        {
+                            ((SignInActivity)activity).signIn(response.body());
+
+                        }else if (response.code()==406)
+                        {
+                            Toast.makeText(activity, getString(R.string.user_bloked), Toast.LENGTH_SHORT).show();
+                        }else
+                        {
+                            Log.e("error_code",response.code()+"_");
+
+
+                                Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("Error",t.getMessage());
+
+
+                        }catch (Exception e){}
+                    }
+                });
+    }
+
     private void checkFound(String phone_code, final String phone) {
         final ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
         dialog.setCancelable(false);

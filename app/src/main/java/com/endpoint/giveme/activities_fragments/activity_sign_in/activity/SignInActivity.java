@@ -107,7 +107,7 @@ public class SignInActivity extends AppCompatActivity {
                 DisplayFragmentLanguage();
                 break;
             case 1:
-                DisplayFragmentChooserLogin();
+                DisplayFragmentPhone();
                 break;
 
         }

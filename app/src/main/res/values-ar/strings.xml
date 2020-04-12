@@ -302,5 +302,7 @@
     <string name="cust_rate">تقييم العملاء</string>
     <string name="reviews">تعليقات</string>
     <string name="no_rev">لا توجد تعليقات</string>
+    <string name="user_name">User Name</string>
+    <string name="password_short">Password Short</string>
 
 </resources>
