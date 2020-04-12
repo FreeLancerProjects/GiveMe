@@ -258,7 +258,7 @@ public class SignInActivity extends AppCompatActivity {
     }
     public void DisplayFragmentUserType()
     {
-        Back();
+    //    Back();
         fragment_count +=1;
 
         if (fragment_user_type == null)
@@ -402,14 +402,15 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void signUpWithImage(String m_name, String m_email, int gender, Uri uri, long date_of_birth) {
+    public void signUpWithImage(String m_name,String name,String pass,String phone,String phone_code,String countrycode, String m_email, int gender, Uri uri, long date_of_birth) {
         RequestBody email_part = Common.getRequestBodyText(m_email);
         RequestBody phone_part = Common.getRequestBodyText(phone);
-        RequestBody phone_code_part = Common.getRequestBodyText(this.phone_code);
+        RequestBody phone_code_part = Common.getRequestBodyText(phone_code);
         RequestBody name_part = Common.getRequestBodyText(m_name);
         RequestBody gender_part = Common.getRequestBodyText(String.valueOf(gender));
         RequestBody country_code_part = Common.getRequestBodyText(countrycode);
-
+        RequestBody uname_part = Common.getRequestBodyText(name);
+        RequestBody pass_part = Common.getRequestBodyText(pass);
         RequestBody date_birth_part = Common.getRequestBodyText(String.valueOf(date_of_birth));
 
         MultipartBody.Part image_part = Common.getMultiPart(this,uri,"user_image");
@@ -418,7 +419,7 @@ public class SignInActivity extends AppCompatActivity {
         final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpWithImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,image_part)
+                .signUpWithImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,uname_part,pass_part,image_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -458,13 +459,13 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-    public void signUpWithoutImage(String m_name, String m_email, int gender, long date_of_birth)
+    public void signUpWithoutImage(String m_name,String name,String pass,String phone,String phone_code,String countrycode, String m_email, int gender, long date_of_birth)
     {
-
+Log.e("hhhh",phone);
         final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpWithoutImage(m_email,phone,this.phone_code,m_name, String.valueOf(gender),countrycode,date_of_birth)
+                .signUpWithoutImage(m_email,phone,phone_code,m_name, String.valueOf(gender),countrycode,date_of_birth,name,pass)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -505,12 +506,15 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void signUpDelegateWithoutImage(String m_name, String m_email, int gender, long date_of_birth, String m_national_id, String m_address, Uri imgUri1, Uri imgUri2, Uri imgUri3, Uri imgUri4)
+    public void signUpDelegateWithoutImage(String m_name,String name,String pass,String phone,String phone_code,String countrycode, String m_email, int gender, long date_of_birth, String m_national_id, String m_address, Uri imgUri1, Uri imgUri2, Uri imgUri3, Uri imgUri4)
     {
         RequestBody email_part = Common.getRequestBodyText(m_email);
         RequestBody phone_part = Common.getRequestBodyText(phone);
-        RequestBody phone_code_part = Common.getRequestBodyText(this.phone_code);
+        RequestBody phone_code_part = Common.getRequestBodyText(phone_code);
         RequestBody name_part = Common.getRequestBodyText(m_name);
+        RequestBody uname_part = Common.getRequestBodyText(name);
+        RequestBody pass_part = Common.getRequestBodyText(pass);
+
         RequestBody gender_part = Common.getRequestBodyText(String.valueOf(gender));
         RequestBody country_code_part = Common.getRequestBodyText(countrycode);
         RequestBody date_birth_part = Common.getRequestBodyText(String.valueOf(date_of_birth));
@@ -528,7 +532,7 @@ public class SignInActivity extends AppCompatActivity {
         final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpDelegateWithoutImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,national_id_part,address_part,image_national_id_part,image_license_part,image_front_part,image_back_part)
+                .signUpDelegateWithoutImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,national_id_part,address_part,uname_part,pass_part,image_national_id_part,image_license_part,image_front_part,image_back_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -569,18 +573,19 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void signUpDelegateWithImage(String m_name, String m_email, int gender, long date_of_birth, String m_national_id, String m_address, Uri image, Uri imgUri1, Uri imgUri2, Uri imgUri3, Uri imgUri4)
+    public void signUpDelegateWithImage(String m_name,String name,String pass,String phone,String phone_code,String countrycode, String m_email, int gender, long date_of_birth, String m_national_id, String m_address, Uri image, Uri imgUri1, Uri imgUri2, Uri imgUri3, Uri imgUri4)
     {
 
 
         RequestBody email_part = Common.getRequestBodyText(m_email);
         RequestBody phone_part = Common.getRequestBodyText(phone);
-        RequestBody phone_code_part = Common.getRequestBodyText(this.phone_code);
+        RequestBody phone_code_part = Common.getRequestBodyText(phone_code);
         RequestBody name_part = Common.getRequestBodyText(m_name);
         RequestBody gender_part = Common.getRequestBodyText(String.valueOf(gender));
         RequestBody country_code_part = Common.getRequestBodyText(countrycode);
         RequestBody date_birth_part = Common.getRequestBodyText(String.valueOf(date_of_birth));
-
+        RequestBody uname_part = Common.getRequestBodyText(name);
+        RequestBody pass_part = Common.getRequestBodyText(pass);
         RequestBody national_id_part =Common.getRequestBodyText(m_national_id);
         RequestBody address_part =Common.getRequestBodyText(m_address);
         MultipartBody.Part image_national_id_part = Common.getMultiPart(this,imgUri1,"user_card_id_image");
@@ -595,7 +600,7 @@ public class SignInActivity extends AppCompatActivity {
         final ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpDelegateWithImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,national_id_part,address_part,image_national_id_part,image_license_part,image_front_part,image_back_part,image_part)
+                .signUpDelegateWithImage(email_part,phone_part,phone_code_part,name_part,gender_part,country_code_part,date_birth_part,national_id_part,address_part,uname_part,pass_part,image_national_id_part,image_license_part,image_front_part,image_back_part,image_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {

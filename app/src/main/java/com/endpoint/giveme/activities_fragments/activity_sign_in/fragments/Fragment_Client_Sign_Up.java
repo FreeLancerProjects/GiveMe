@@ -2,6 +2,7 @@ package com.endpoint.giveme.activities_fragments.activity_sign_in.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +29,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.endpoint.giveme.R;
 import com.endpoint.giveme.activities_fragments.activity_sign_in.activity.SignInActivity;
 import com.endpoint.giveme.share.Common;
 import com.endpoint.giveme.tags.Tags;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mukesh.countrypicker.Country;
+import com.mukesh.countrypicker.CountryPicker;
+import com.mukesh.countrypicker.listeners.OnCountryPickerListener;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -44,7 +50,7 @@ import java.util.Locale;
 import co.ceryle.segmentedbutton.SegmentedButtonGroup;
 import io.paperdb.Paper;
 
-public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialog.OnDateSetListener , OnCountryPickerListener {
 
     private FloatingActionButton fab;
     private SignInActivity activity;
@@ -61,7 +67,14 @@ public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialo
     private String current_language;
     private int gender = Tags.MALE;
     private long date_of_birth = 0;
-
+    private ImageView arrow;
+    private LinearLayout ll_country;
+    private TextView tv_country,tv_code,tv_note;
+    //
+    private EditText edtusername,edtpass,edt_phone;
+    private CountryPicker picker;
+    private String code = "";
+    private String country_code="sa";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,7 +96,15 @@ public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialo
 
         ll_birth_date = view.findViewById(R.id.ll_birth_date);
         tv_birth_date = view.findViewById(R.id.tv_birth_date);
+        arrow = view.findViewById(R.id.arrow);
+//        ll_country = view.findViewById(R.id.ll_country);
+//        tv_country = view.findViewById(R.id.tv_country);
+        tv_code = view.findViewById(R.id.tvCode);
+        tv_note = view.findViewById(R.id.tv_note);
 
+        edt_phone = view.findViewById(R.id.edtPhone);
+        edtusername=view.findViewById(R.id.edtName);
+        edtpass=view.findViewById(R.id.edtPassword);
         edt_name = view.findViewById(R.id.edt_name);
         edt_email = view.findViewById(R.id.edt_email);
         image_personal = view.findViewById(R.id.image_personal);
@@ -143,6 +164,83 @@ public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialo
                 }
             }
         });
+        if (current_language.equals("ar"))
+        {
+            arrow.setImageResource(R.drawable.ic_left_arrow);
+            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.black), PorterDuff.Mode.SRC_IN);
+        }else
+        {
+            arrow.setImageResource(R.drawable.ic_right_arrow);
+            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.black), PorterDuff.Mode.SRC_IN);
+
+        }
+
+        CreateCountryDialog();
+
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                picker.showDialog(activity);
+            }
+
+
+        });
+
+
+    }
+    private void CreateCountryDialog() {
+        CountryPicker.Builder builder = new CountryPicker.Builder()
+                .canSearch(true)
+                .with(activity)
+                .listener(this);
+        picker = builder.build();
+
+        TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+
+        try {
+            if (picker.getCountryFromSIM() != null) {
+                updateUi(picker.getCountryFromSIM());
+
+            } else if (telephonyManager != null && picker.getCountryByISO(telephonyManager.getNetworkCountryIso()) != null)
+            {
+                updateUi(picker.getCountryByISO(telephonyManager.getNetworkCountryIso()));
+
+
+            }
+
+            else if (Locale.getDefault()!=null&&picker.getCountryByLocale(Locale.getDefault()) != null) {
+                updateUi(picker.getCountryByLocale(Locale.getDefault()));
+
+            }else
+            {
+                tv_code.setText("+966");
+                tv_country.setText("Saudi Arabia");
+                this.country_code = "sa";
+
+            }
+        }catch (Exception e)
+        {
+            tv_code.setText("+966");
+            tv_country.setText("Saudi Arabia");
+            this.country_code = "sa";
+        }
+
+
+
+
+
+    }
+    @Override
+    public void onSelectCountry(Country country) {
+        updateUi(country);
+    }
+
+    private void updateUi(Country country) {
+        country_code = country.getCode();
+        tv_code.setText(country.getDialCode());
+        code = country.getDialCode();
+
+
 
 
     }
@@ -171,23 +269,35 @@ public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialo
     private void CheckData() {
         String m_name = edt_name.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
+        String phone_regex = "^[+]?[0-9]{6,}$";
+String phone=edt_phone.getText().toString().trim();
+        String name = edtusername.getText().toString().trim();
+        String pass=edtpass.getText().toString().trim();
+        if (phone.startsWith("0"))
+        {
+            phone = phone.replaceFirst("0","");
+        }
 
 
         if (!TextUtils.isEmpty(m_name) &&
 //                !TextUtils.isEmpty(m_email) &&
 //                Patterns.EMAIL_ADDRESS.matcher(m_email).matches() &&
+                !TextUtils.isEmpty(name) && !TextUtils.isEmpty(pass) &&pass.length()>=6&&!TextUtils.isEmpty(phone)&&
                 date_of_birth != 0
         ) {
             Common.CloseKeyBoard(activity, edt_name);
             edt_name.setError(null);
+            edtusername.setError(null);
+            edtpass.setError(null);
+            edt_phone.setError(null);
            // edt_email.setError(null);
             tv_birth_date.setError(null);
 
             if (uri == null) {
-                activity.signUpWithoutImage(m_name, m_email, gender, date_of_birth);
+                activity.signUpWithoutImage(m_name,name,pass,phone,code.replace("+","00"),country_code, m_email, gender, date_of_birth);
 
             } else {
-                activity.signUpWithImage(m_name, m_email, gender, uri, date_of_birth);
+                activity.signUpWithImage(m_name,name,pass,phone,code.replace("+","00"),country_code, m_email, gender, uri, date_of_birth);
 
             }
 
@@ -198,7 +308,28 @@ public class Fragment_Client_Sign_Up extends Fragment implements DatePickerDialo
                 edt_name.setError(null);
 
             }
-
+            if (TextUtils.isEmpty(name)) {
+                edtusername.setError(getString(R.string.field_req));
+            } else
+            {
+                edtusername.setError(null);
+            }
+            if (TextUtils.isEmpty(phone)) {
+                edt_phone.setError(getString(R.string.field_req));
+            } else
+            {
+                edt_phone.setError(null);
+            }
+            if (TextUtils.isEmpty(pass)) {
+                edtpass.setError(getString(R.string.field_req));
+            }
+            else   if (pass.length()<6) {
+                edtpass.setError(getString(R.string.password_short));
+            }
+            else
+            {
+                edtpass.setError(null);
+            }
            /* if (TextUtils.isEmpty(m_email)) {
                 edt_email.setError(getString(R.string.field_req));
             } else if (!Patterns.EMAIL_ADDRESS.matcher(m_email).matches()) {

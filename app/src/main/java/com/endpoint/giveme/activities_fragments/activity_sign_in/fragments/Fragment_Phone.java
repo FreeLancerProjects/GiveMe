@@ -117,26 +117,26 @@ tv_new.setOnClickListener(new View.OnClickListener() {
 
         if (current_language.equals("ar"))
         {
-            arrow.setImageResource(R.drawable.ic_right_arrow);
-            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
+//            arrow.setImageResource(R.drawable.ic_right_arrow);
+  //          arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
         }else
             {
-                arrow.setImageResource(R.drawable.ic_left_arrow);
-                arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
+    //            arrow.setImageResource(R.drawable.ic_left_arrow);
+      //          arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
 
             }
         tv_note.setText(getString(R.string.never_share_phone_number)+"\n"+getString(R.string.your_privacy_guaranteed));
 
         CreateCountryDialog();
 
-        ll_country.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                picker.showDialog(activity);
-            }
-
-
-        });
+//        ll_country.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                picker.showDialog(activity);
+//            }
+//
+//
+//        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +159,7 @@ String pass=edtpass.getText().toString().trim();
 //            phone = phone.replaceFirst("0","");
 //        }
 
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(name) &&pass.length()>=6) {
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(pass) &&pass.length()>=6) {
             edtname.setError(null);
             edtpass.setError(null);
             Common.CloseKeyBoard(activity, edtpass);
@@ -380,10 +380,10 @@ String pass=edtpass.getText().toString().trim();
     }
 
     private void updateUi(Country country) {
-        country_code = country.getCode();
-        tv_country.setText(country.getName());
-        tv_code.setText(country.getDialCode());
-        code = country.getDialCode();
+//        country_code = country.getCode();
+//        tv_country.setText(country.getName());
+//        tv_code.setText(country.getDialCode());
+//        code = country.getDialCode();
 
 
 

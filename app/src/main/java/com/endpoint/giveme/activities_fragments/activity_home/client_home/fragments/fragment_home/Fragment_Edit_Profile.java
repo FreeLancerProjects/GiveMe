@@ -3,6 +3,7 @@ package com.endpoint.giveme.activities_fragments.activity_home.client_home.fragm
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -42,6 +44,9 @@ import com.endpoint.giveme.singletone.UserSingleTone;
 import com.endpoint.giveme.tags.Tags;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.mukesh.countrypicker.Country;
+import com.mukesh.countrypicker.CountryPicker;
+import com.mukesh.countrypicker.listeners.OnCountryPickerListener;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -61,14 +66,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.OnDateSetListener{
+public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.OnDateSetListener, OnCountryPickerListener {
 
     private final static String TAG = "Data";
     private FloatingActionButton fab;
     private ClientHomeActivity activity;
     private EditText edt_name,edt_email,edt_address;
-    private TextView tv_phone,tv_birth_date;
-    private ImageView arrow;
+    private TextView tv_birth_date;
+    private ImageView arrow,arrowback;
     private CircleImageView image;
     private LinearLayout ll_back,ll_phone,ll_birth_date,ll_address;
     private SimpleRatingBar rateBar;
@@ -86,7 +91,10 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
     private UserSingleTone userSingleTone;
     private long date_of_birth=0;
     private String country_code,phone_code,phone,address="";
-
+    private TextView tv_country,tv_code;
+    //
+    private EditText edt_phone;
+    private CountryPicker picker;
 
     @Nullable
     @Override
@@ -112,19 +120,23 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
         userSingleTone = UserSingleTone.getInstance();
         preferences = Preferences.getInstance();
         Paper.init(activity);
+        tv_code = view.findViewById(R.id.tvCode);
 
+        edt_phone = view.findViewById(R.id.edtPhone);
         current_language = Paper.book().read("lang", Locale.getDefault().getLanguage());
         ll_back  = view.findViewById(R.id.ll_back);
-        ll_phone  = view.findViewById(R.id.ll_phone);
+       // ll_phone  = view.findViewById(R.id.ll_phone);
         ll_birth_date  = view.findViewById(R.id.ll_birth_date);
         ll_address  = view.findViewById(R.id.ll_address);
-        tv_phone  = view.findViewById(R.id.tv_phone);
+        //tv_phone  = view.findViewById(R.id.tv_phone);
         tv_birth_date  = view.findViewById(R.id.tv_birth_date);
         edt_address  = view.findViewById(R.id.edt_address);
 
 
 
         arrow =view.findViewById(R.id.arrow);
+        arrowback =view.findViewById(R.id.arrowback);
+
         image =view.findViewById(R.id.image);
         edt_name = view.findViewById(R.id.edt_name);
         edt_email =view.findViewById(R.id.edt_email);
@@ -137,18 +149,21 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
 
         if (current_language.equals("ar"))
         {
-            arrow.setImageResource(R.drawable.ic_right_arrow);
-            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
-
+            arrowback.setImageResource(R.drawable.ic_right_arrow);
+            arrowback.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
+            arrow.setImageResource(R.drawable.ic_left_arrow);
+            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.black), PorterDuff.Mode.SRC_IN);
 
         }else
         {
 
-            arrow.setImageResource(R.drawable.ic_left_arrow);
-            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
-
+            arrowback.setImageResource(R.drawable.ic_left_arrow);
+            arrowback.setColorFilter(ContextCompat.getColor(activity,R.color.white), PorterDuff.Mode.SRC_IN);
+            arrow.setImageResource(R.drawable.ic_right_arrow);
+            arrow.setColorFilter(ContextCompat.getColor(activity,R.color.black), PorterDuff.Mode.SRC_IN);
 
         }
+
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,12 +199,12 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
             }
         });
 
-        ll_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.DisplayFragmentPhone();
-            }
-        });
+//        ll_phone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activity.DisplayFragmentPhone();
+//            }
+//        });
         ll_birth_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,6 +219,74 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
             userModel = (UserModel) bundle.getSerializable(TAG);
             UpdateUI(userModel);
         }
+
+
+        CreateCountryDialog();
+
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                picker.showDialog(activity);
+            }
+
+
+        });
+
+
+    }
+    private void CreateCountryDialog() {
+        CountryPicker.Builder builder = new CountryPicker.Builder()
+                .canSearch(true)
+                .with(activity)
+                .listener(this);
+        picker = builder.build();
+
+        TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+
+        try {
+            if (picker.getCountryFromSIM() != null) {
+                updateUi(picker.getCountryFromSIM());
+
+            } else if (telephonyManager != null && picker.getCountryByISO(telephonyManager.getNetworkCountryIso()) != null)
+            {
+                updateUi(picker.getCountryByISO(telephonyManager.getNetworkCountryIso()));
+
+
+            }
+
+            else if (Locale.getDefault()!=null&&picker.getCountryByLocale(Locale.getDefault()) != null) {
+                updateUi(picker.getCountryByLocale(Locale.getDefault()));
+
+            }else
+            {
+                tv_code.setText("+966");
+                tv_country.setText("Saudi Arabia");
+                this.country_code = "sa";
+
+            }
+        }catch (Exception e)
+        {
+            tv_code.setText("+966");
+            tv_country.setText("Saudi Arabia");
+            this.country_code = "sa";
+        }
+
+
+
+
+
+    }
+    @Override
+    public void onSelectCountry(Country country) {
+        updateUi(country);
+    }
+
+    private void updateUi(Country country) {
+        country_code = country.getCode();
+        tv_code.setText(country.getDialCode());
+        phone_code = country.getDialCode();
+
+
 
 
     }
@@ -225,9 +308,9 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
 
             phone_code = userModel.getData().getUser_phone_code().replace("00","+");
             phone = userModel.getData().getUser_phone();
-            tv_phone.setText(phone_code+" "+phone);
+            edt_phone.setText(phone);
             country_code = userModel.getData().getUser_country();
-
+tv_code.setText(phone_code);
             if (userModel.getData().getUser_type().equals(Tags.TYPE_DELEGATE))
             {
                 ll_address.setVisibility(View.VISIBLE);
@@ -280,19 +363,26 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
     {
         String m_name = edt_name.getText().toString().trim();
         String m_email = edt_email.getText().toString().trim();
+        String phone=edt_phone.getText().toString().trim();
+
+        if (phone.startsWith("0"))
+        {
+            phone = phone.replaceFirst("0","");
+        }
 
         if (!TextUtils.isEmpty(m_name)&&
                 !TextUtils.isEmpty(m_email)&&
-                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()
+                Patterns.EMAIL_ADDRESS.matcher(m_email).matches()&&!TextUtils.isEmpty(phone)
                 )
         {
             Common.CloseKeyBoard(activity,edt_name);
             edt_name.setError(null);
             edt_email.setError(null);
+            edt_phone.setError(null);
 
             if (userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT))
             {
-                UploadUserDataToUpdate(m_name,m_email,address);
+                UploadUserDataToUpdate(m_name,m_email,phone,phone_code.replace("+","00"),address);
 
             }else
                 {
@@ -301,7 +391,7 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
                     if (!TextUtils.isEmpty(m_name))
                     {
                         edt_address.setError(null);
-                        UploadUserDataToUpdate(m_name,m_email,address);
+                        UploadUserDataToUpdate(m_name,m_email,phone,phone_code.replace("+","00"),address);
 
                     }else
                         {
@@ -333,7 +423,12 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
                 edt_email.setError(null);
 
             }
-
+            if (TextUtils.isEmpty(phone)) {
+                edt_phone.setError(getString(R.string.field_req));
+            } else
+            {
+                edt_phone.setError(null);
+            }
 
         }
     }
@@ -343,8 +438,8 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
         this.country_code = country_code;
         this.phone_code = phone_code;
         this.phone = phone;
-        tv_phone.setText(phone_code+" "+phone);
-
+        edt_phone.setText(phone);
+tv_code.setText(phone_code);
 
     }
     private void Check_ReadPermission()
@@ -465,7 +560,7 @@ public class Fragment_Edit_Profile extends Fragment implements DatePickerDialog.
                 });
     }
 
-    private void UploadUserDataToUpdate(String m_name, String m_email, String address) {
+    private void UploadUserDataToUpdate(String m_name, String m_email,String phone,String phone_code, String address) {
 
         Log.e("date",date_of_birth+"_");
         final ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
