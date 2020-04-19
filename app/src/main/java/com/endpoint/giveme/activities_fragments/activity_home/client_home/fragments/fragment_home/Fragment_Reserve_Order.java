@@ -137,7 +137,11 @@ public class Fragment_Reserve_Order extends Fragment {
         Paper.init(activity);
         current_language = Paper.book().read("lang", Locale.getDefault().getLanguage());
 
-        timesList = new String[]{getString(R.string.hour1)};
+        timesList = new String[]{getString(R.string.hour1),getString(R.string.hour2),
+                getString(R.string.hour3),
+                getString(R.string.day1),
+                getString(R.string.day2),
+                getString(R.string.day3)};
         cons_add_coupon = view.findViewById(R.id.cons_add_coupon);
 
        /* getString(R.string.hour2),

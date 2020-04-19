@@ -109,7 +109,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             String class_name = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
             Log.e("class_name", class_name);
-            if (class_name.equals("com.creativeshare.mrsool.activities_fragments.activity_chat.ChatActivity")) {
+            if (class_name.equals("com.endpoint.giveme.activities_fragments.activity_chat.ChatActivity")) {
                 if (room_id_fk.equals(getChatUserModel().getRoom_id())) {
 
                     MessageModel messageModel = new MessageModel(message_id, room_id_fk, date, message, message_type, msg_image, from_user_id, from_name, from_user_image, from_user_phone_code, from_user_phone, to_user_id, to_user_full_name, to_user_image, to_user_phone_code, to_user_phone);
@@ -384,11 +384,70 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
             }
             else if (notification_type.equals(Tags.FIREBASE_NOT_RATE)) {
+                builder.setContentTitle(map.get("from_name"));
+
+                Intent intent = new Intent(this, ClientHomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                String order_status = map.get("order_status");
+                Log.e("order_status",order_status+"_");
+                builder.setContentText(getString(R.string.client_rate_order));
 
                 NotificationTypeModel notificationTypeModel = new NotificationTypeModel(Tags.FIREBASE_NOT_RATE);
-                EventBus.getDefault().post(notificationTypeModel);
+                intent.putExtra("status", order_status);
 
-            } else if (notification_type.equals(Tags.FIREBASE_NOT_BEDRIVER)) {
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(pendingIntent);
+
+                final Target target = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        if (manager != null) {
+                            builder.setLargeIcon(bitmap);
+                            EventBus.getDefault().post(notificationTypeModel);
+                            manager.createNotificationChannel(channel);
+                            manager.notify(new Random().nextInt(200), builder.build());
+                        }
+
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                };
+
+
+                new Handler(Looper.getMainLooper())
+                        .postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                String from_image = map.get("from_image");
+                                if (from_image.equals("0"))
+                                {
+
+                                    Picasso.with(FireBaseMessaging.this).load(R.drawable.logo_only).into(target);
+
+                                }else
+                                {
+                                    Picasso.with(FireBaseMessaging.this).load(Uri.parse(Tags.IMAGE_URL + from_image)).resize(250,250).into(target);
+
+                                }
+
+
+
+
+                            }
+                        }, 1);
+            }
+
+            else if (notification_type.equals(Tags.FIREBASE_NOT_BEDRIVER)) {
                 builder.setContentTitle(getString(R.string.Admin));
                 String status = map.get("action_status");
                 final BeDriverModel beDriverModel = new BeDriverModel(status);
@@ -554,7 +613,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             String class_name = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
             Log.e("class_name", class_name);
-            if (class_name.equals("com.creativeshare.mrsool.activities_fragments.activity_chat.ChatActivity")) {
+            if (class_name.equals("com.endpoint.giveme.activities_fragments.activity_chat.ChatActivity")) {
                 if (room_id_fk.equals(getChatUserModel().getRoom_id())) {
 
                     MessageModel messageModel = new MessageModel(message_id, room_id_fk, date, message, message_type, msg_image, from_user_id, from_name, from_user_image, from_user_phone_code, from_user_phone, to_user_id, to_user_full_name, to_user_image, to_user_phone_code, to_user_phone);
@@ -788,12 +847,70 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 TypingModel typingModel = new TypingModel(from_user_id, to_user_id, room_id, typing_value, from_name);
                 EventBus.getDefault().post(typingModel);
 
-            } else if (notification_type.equals(Tags.FIREBASE_NOT_RATE)) {
+            }
+            else if (notification_type.equals(Tags.FIREBASE_NOT_RATE)) {
+                builder.setContentTitle(map.get("from_name"));
+
+                Intent intent = new Intent(this, ClientHomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                String order_status = map.get("order_status");
+                Log.e("order_status",order_status+"_");
+                builder.setContentText(getString(R.string.client_rate_order));
 
                 NotificationTypeModel notificationTypeModel = new NotificationTypeModel(Tags.FIREBASE_NOT_RATE);
-                EventBus.getDefault().post(notificationTypeModel);
+                intent.putExtra("status", order_status);
 
-            } else if (notification_type.equals(Tags.FIREBASE_NOT_BEDRIVER)) {
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(pendingIntent);
+
+                final Target target = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        if (manager != null) {
+                            builder.setLargeIcon(bitmap);
+                            EventBus.getDefault().post(notificationTypeModel);
+                            manager.notify(new Random().nextInt(200), builder.build());
+                        }
+
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                };
+
+
+                new Handler(Looper.getMainLooper())
+                        .postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                String from_image = map.get("from_image");
+                                if (from_image.equals("0"))
+                                {
+
+                                    Picasso.with(FireBaseMessaging.this).load(R.drawable.logo_only).into(target);
+
+                                }else
+                                {
+                                    Picasso.with(FireBaseMessaging.this).load(Uri.parse(Tags.IMAGE_URL + from_image)).resize(250,250).into(target);
+
+                                }
+
+
+
+
+                            }
+                        }, 1);
+            }
+            else if (notification_type.equals(Tags.FIREBASE_NOT_BEDRIVER)) {
                 builder.setContentTitle(getString(R.string.Admin));
                 String status = map.get("action_status");
                 final BeDriverModel beDriverModel = new BeDriverModel(status);

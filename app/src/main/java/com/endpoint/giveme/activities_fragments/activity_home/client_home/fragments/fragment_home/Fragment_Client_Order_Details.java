@@ -28,6 +28,8 @@ import com.endpoint.giveme.activities_fragments.bill_activity.BillActivity;
 import com.endpoint.giveme.models.BillModel;
 import com.endpoint.giveme.models.ChatUserModel;
 import com.endpoint.giveme.models.OrderDataModel;
+import com.endpoint.giveme.models.UserModel;
+import com.endpoint.giveme.preferences.Preferences;
 import com.endpoint.giveme.remote.Api;
 import com.endpoint.giveme.share.Common;
 import com.endpoint.giveme.tags.Tags;
@@ -68,7 +70,8 @@ public class Fragment_Client_Order_Details extends Fragment {
     ////////////////////////////////
     private OrderDataModel.OrderModel order;
     private BillModel billModel=null;
-
+private UserModel userModel;
+private Preferences preferences;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,7 +92,8 @@ public class Fragment_Client_Order_Details extends Fragment {
         activity = (ClientHomeActivity) getActivity();
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-
+preferences=Preferences.getInstance();
+userModel=preferences.getUserData(activity);
         image_back = view.findViewById(R.id.image_back);
         if (current_lang.equals("ar")) {
             image_back.setImageResource(R.drawable.ic_right_arrow);
@@ -168,7 +172,11 @@ public class Fragment_Client_Order_Details extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + "0"+order.getDriver_user_phone()));
+                if(userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT)){
+                intent.setData(Uri.parse("tel:" + order.getDriver_user_phone_code()+order.getDriver_user_phone()));}
+                else {
+                    intent.setData(Uri.parse("tel:" + order.getClient_user_phone_code()+order.getClient_user_phone()));
+                }
                 activity.startActivity(intent);
             }
         });

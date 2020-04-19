@@ -306,5 +306,6 @@
     <string name="no_rev">No reviews</string>
     <string name="user_name">User Name</string>
     <string name="password_short">Password Short</string>
+    <string name="client_rate_order">Client Rate Order</string>
 
 </resources>

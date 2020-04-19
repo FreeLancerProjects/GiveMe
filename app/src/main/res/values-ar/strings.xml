@@ -304,5 +304,6 @@
     <string name="no_rev">لا توجد تعليقات</string>
     <string name="user_name">اسم المستخدم</string>
     <string name="password_short">كلمة المرور قصيره</string>
+    <string name="client_rate_order">Client Rate Order</string>
 
 </resources>

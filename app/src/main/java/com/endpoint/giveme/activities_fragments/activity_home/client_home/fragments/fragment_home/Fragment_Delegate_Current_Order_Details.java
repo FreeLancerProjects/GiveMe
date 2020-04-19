@@ -58,7 +58,7 @@ import retrofit2.Response;
 public class Fragment_Delegate_Current_Order_Details extends Fragment {
     private static final String TAG = "ORDER";
     private ClientHomeActivity activity;
-    private ImageView image_back,image_arrow,image_arrow2,image_chat,order_image,image_bill;
+    private ImageView image_back,image_arrow,image_arrow2,image_chat,order_image,image_bill,image_call;
     private LinearLayout ll_back,ll_address,ll_shipment;
     private String current_lang;
     private TextView tv_client_name,tv_address,rest_name,tv_order_details,tv_order_state,tv_order_next_state,tv_location_pickup,tv_location_dropoff;
@@ -98,6 +98,7 @@ public class Fragment_Delegate_Current_Order_Details extends Fragment {
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
 
+        image_call = view.findViewById(R.id.image_call);
 
         image_back = view.findViewById(R.id.image_back);
         image_arrow = view.findViewById(R.id.image_arrow);
@@ -151,6 +152,19 @@ public class Fragment_Delegate_Current_Order_Details extends Fragment {
             }
         });
 
+        image_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                if(userModel.getData().getUser_type().equals(Tags.TYPE_CLIENT)){
+                    intent.setData(Uri.parse("tel:" + order.getDriver_user_phone_code()+order.getDriver_user_phone()));}
+                else {
+                    intent.setData(Uri.parse("tel:" + order.getClient_user_phone_code()+order.getClient_user_phone()));
+                }
+                activity.startActivity(intent);
+            }
+        });
 
         fl_map.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +197,12 @@ public class Fragment_Delegate_Current_Order_Details extends Fragment {
 
             }
         });
-
+        if (order.getOrder_status().equals(String.valueOf(Tags.STATE_ORDER_NEW))) {
+            image_call.setVisibility(View.GONE);
+        }
+        else {
+            image_call.setVisibility(View.VISIBLE);
+        }
 
         image_bill.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +210,7 @@ public class Fragment_Delegate_Current_Order_Details extends Fragment {
                 CreateImageAlertDialog();
             }
         });
+
 
     }
 
