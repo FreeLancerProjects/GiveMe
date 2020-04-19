@@ -130,7 +130,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                     );
                     builder.setChannelId(CHANNEL_ID);
                     builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-                    builder.setSmallIcon(R.drawable.ic_notification);
+                    builder.setSmallIcon(R.mipmap.ic_notification);
                     builder.setContentTitle(map.get("from_name"));
 
                     Intent intent = new Intent(this, ChatActivity.class);
@@ -200,7 +200,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 );
                 builder.setChannelId(CHANNEL_ID);
                 builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-                builder.setSmallIcon(R.drawable.ic_notification);
+                builder.setSmallIcon(R.mipmap.ic_notification);
                 builder.setContentTitle(map.get("from_name"));
 
                 Intent intent = new Intent(this, ChatActivity.class);
@@ -270,7 +270,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
             builder.setChannelId(CHANNEL_ID);
             builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-            builder.setSmallIcon(R.drawable.ic_notification);
+            builder.setSmallIcon(R.mipmap.ic_notification);
 
             if (notification_type.equals(Tags.FIREBASE_NOT_ORDER_STATUS)||notification_type.equals(Tags.FIREBASE_NOT_ORDER_STATUSs)) {
 
@@ -623,7 +623,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                     final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
                     builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-                    builder.setSmallIcon(R.drawable.ic_notification);
+                    builder.setSmallIcon(R.mipmap.ic_notification);
                     builder.setContentTitle(map.get("from_name"));
 
                     Intent intent = new Intent(this, ChatActivity.class);
@@ -681,7 +681,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
                 builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-                builder.setSmallIcon(R.drawable.ic_notification);
+                builder.setSmallIcon(R.mipmap.ic_notification);
                 builder.setContentTitle(map.get("from_name"));
 
                 Intent intent = new Intent(this, ChatActivity.class);
@@ -738,7 +738,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
             builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
-            builder.setSmallIcon(R.drawable.ic_notification);
+            builder.setSmallIcon(R.mipmap.ic_notification);
 
             if (notification_type.equals(Tags.FIREBASE_NOT_ORDER_STATUS)||notification_type.equals(Tags.FIREBASE_NOT_ORDER_STATUSs)) {
                 builder.setContentTitle(map.get("from_name"));

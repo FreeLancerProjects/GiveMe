@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Give Me</string>
     <!--AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY-->
-    <string name="map_api_key">AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY</string>
+    <string name="map_api_key">AIzaSyDz07XWgRsDTQtmA4IOvx-fSIc1d_Wrk9c</string>
     <string name="notifications">Notifications</string>
     <string name="si_su">Please Sign in or sign up .</string>
     <string name="ok">Ok</string>
@@ -69,7 +69,7 @@
     <string name="pers_photo_req">Personal photo required</string>
     <string name="inv_email">Invalid email</string>
     <string name="inc_img_path">incorrect image path</string>
-    <string name="allow_mrsoolk_to_access_gps">Allow Gably To Access GPS</string>
+    <string name="allow_mrsoolk_to_access_gps">Allow Give me To Access GPS</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
     <string name="rate">Rate</string>
@@ -206,7 +206,7 @@
     <string name="type_a_message">Type a message</string>
     <string name="new_order_sent">New order sent</string>
     <string name="offer_accepted">Offer accepted</string>
-    <string name="shipment">Gably package</string>
+    <string name="shipment">Give me package</string>
     <string name="do_you_have_a_purpose_that_you_want_to_be_assigned_to_any_place_in_your_city_the_shipment_provide_this_service">Got a small package that you want to send somewhere in your city? MARSOOLK package allows you to do just that!</string>
     <string name="receiving_and_delivery_location">Dropoff &amp; Pickup</string>
     <string name="receiving_location">Pickup location</string>
@@ -295,7 +295,7 @@
     <string name="place_name">place name</string>
     <string name="order_cancel"> cancel order</string>
     <string name="order_canceled">order canceled by client order number : </string>
-    <string name="admin">Gably App</string>
+    <string name="admin">Give me App</string>
     <string name="searching">Searching for a delegate </string>
     <string name="user_dele">User deleted from admin</string>
     <string name="user_bloked">User blocked from admin</string>
