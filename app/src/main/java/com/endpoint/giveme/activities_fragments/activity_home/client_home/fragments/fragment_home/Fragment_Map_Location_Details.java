@@ -281,7 +281,7 @@ public class Fragment_Map_Location_Details extends Fragment implements OnMapRead
 
 
         Api.getService(Tags.googleDirectionBase_url)
-                .getDirection(origin, dest, "rail", getString(R.string.map_api_key))
+                .getDirection(origin, dest, "rail", getString(R.string.map_api_key2))
                 .enqueue(new Callback<PlaceDirectionModel>() {
                     @Override
                     public void onResponse(Call<PlaceDirectionModel> call, Response<PlaceDirectionModel> response) {
