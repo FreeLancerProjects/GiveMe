@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">قيف مى</string>
-    <string name="map_api_key">AIzaSyDz07XWgRsDTQtmA4IOvx-fSIc1d_Wrk9c</string>
+    <string name="map_api_key">AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY</string>
     <string name="map_api_key2">AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY</string>
 
     <string name="notifications">الإشعارات</string>
