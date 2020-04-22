@@ -77,7 +77,11 @@ public class Fragment_Client_Store extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_client_store, container, false);
+
         initView(view);
+        if(location!=null&&savedInstanceState!=null){
+            activity.DisplayFragmentHomeView();
+        }
         return view;
     }
 

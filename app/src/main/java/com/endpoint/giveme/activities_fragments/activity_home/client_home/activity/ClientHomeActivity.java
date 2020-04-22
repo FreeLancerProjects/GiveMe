@@ -2195,12 +2195,18 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        DisplayFragmentHomeView();
 
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location)
+
+    {
+
         LocationListener(location);
+        DisplayFragmentHomeView();
+
     }
 
     /////////////////////////////////////////////////////////////////

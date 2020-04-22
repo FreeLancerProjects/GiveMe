@@ -28,6 +28,7 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
 }
 
 dependencies {
@@ -69,5 +70,7 @@ dependencies {
     implementation 'jp.wasabeef:picasso-transformations:2.2.1'
     implementation 'com.zcw:togglebutton-library:1.0.0'
     implementation 'com.google.android.libraries.places:places:1.1.0'
+
+
 
 }
