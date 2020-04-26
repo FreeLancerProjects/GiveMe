@@ -360,7 +360,7 @@ public class ClientHomeActivity extends AppCompatActivity implements GoogleApiCl
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                                             if (response.isSuccessful()) {
-                                                Log.e("Success", "token updated");
+                                                Log.e("Success", token);
                                             }
                                         }
 

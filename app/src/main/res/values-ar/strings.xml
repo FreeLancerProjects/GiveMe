@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">قيف مى</string>
-    <string name="map_api_key">AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY</string>
-    <string name="map_api_key2">AIzaSyArjmbYWTWZhDFFtPOLRLKYwjtBDkOEGrY</string>
+    <string name="map_api_key">AIzaSyBXYdxWjXHPrZ1Qv5jBujwc2frR1_QRabg</string>
+    <string name="map_api_key2">AIzaSyBXYdxWjXHPrZ1Qv5jBujwc2frR1_QRabg</string>
 
     <string name="notifications">الإشعارات</string>
     <string name="si_su">قم بتسجيل الدخول أو إنشاء حساب جديد .</string>

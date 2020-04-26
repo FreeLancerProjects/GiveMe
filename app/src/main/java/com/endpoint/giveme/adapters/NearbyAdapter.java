@@ -91,7 +91,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.MyHolder> 
         public void BindData(PlaceModel placeModel) {
             if (placeModel.getPhotosList().size()>0)
             {
-                String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+placeModel.getPhotosList().get(0).getPhoto_reference()+"&key=AIzaSyCbc2Y5AIwZ8uUeHRUXiozGN3CnpjKT0oI";
+                String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+placeModel.getPhotosList().get(0).getPhoto_reference()+"&key=AIzaSyBXYdxWjXHPrZ1Qv5jBujwc2frR1_QRabg";
                 Picasso.with(context).load(Uri.parse(url)).fit().into(image);
 
             }else
