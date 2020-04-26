@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.paperdb.Paper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -248,14 +249,19 @@ public class Fragment_Search extends Fragment {
 
         Api.getService("https://maps.googleapis.com/maps/api/")
                 .getNearbySearchStores(loc,5000,query,current_language,getString(R.string.map_api_key))
-                .enqueue(new Callback<NearbyStoreDataModel>() {
+                .enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<NearbyStoreDataModel> call, Response<NearbyStoreDataModel> response) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             progBar.setVisibility(View.GONE);
-                            if (response.body()!=null&&response.body().getResults()!=null&&response.body().getResults().size()>0) {
+                            if (response.body()!=null) {
                                 preferences.saveQuery(activity, new QueryModel(query.trim()));
-                                updateAdapter(response.body().getResults());
+                                try {
+                                    Log.e("kdkdkdkk",response.body().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                //   updateAdapter(response.body().getResults());
 
                             } else {
                                 ll_no_store.setVisibility(View.VISIBLE);
@@ -276,7 +282,7 @@ public class Fragment_Search extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<NearbyStoreDataModel> call, Throwable t) {
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
 
 
