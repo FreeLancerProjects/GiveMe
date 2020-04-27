@@ -27,6 +27,7 @@ import com.endpoint.giveme.activities_fragments.activity_home.client_home.activi
 import com.endpoint.giveme.adapters.NearbyAdapter;
 import com.endpoint.giveme.adapters.QueryAdapter;
 import com.endpoint.giveme.adapters.SliderAdapter;
+import com.endpoint.giveme.models.LocationModel;
 import com.endpoint.giveme.models.NearbyModel;
 import com.endpoint.giveme.models.NearbyStoreDataModel;
 import com.endpoint.giveme.models.PhotosModel;
@@ -35,10 +36,14 @@ import com.endpoint.giveme.models.QuerySearchModel;
 import com.endpoint.giveme.models.SliderModel;
 import com.endpoint.giveme.remote.Api;
 import com.endpoint.giveme.tags.Tags;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.tabs.TabLayout;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -249,7 +254,6 @@ public class Fragment_Client_Store extends Fragment {
             Log.e("location",loc);
             Log.e("query",query);
 
-
             Api.getService("https://maps.googleapis.com/maps/api/")
                     .getNearbyStores(loc,15000,query,current_language,getString(R.string.map_api_key))
                     .enqueue(new Callback<NearbyStoreDataModel>() {
@@ -301,6 +305,7 @@ public class Fragment_Client_Store extends Fragment {
 
     private void updateUi(NearbyStoreDataModel nearbyStoreDataModel, Location location) {
 
+        LocationModel.setLocation(location);
 
 
 
@@ -312,7 +317,7 @@ public class Fragment_Client_Store extends Fragment {
         }
 
         nearbyModelList.addAll(getPlaceModelFromResult(nearbyStoreDataModel.getResults()));
-
+        Collections.sort(nearbyModelList,PlaceModel.distanceComparator);
 
         recViewQueries.setVisibility(View.VISIBLE);
         if (adapter == null)

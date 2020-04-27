@@ -47,11 +47,11 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import io.paperdb.Paper;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -249,19 +249,14 @@ public class Fragment_Search extends Fragment {
 
         Api.getService("https://maps.googleapis.com/maps/api/")
                 .getNearbySearchStores(loc,5000,query,current_language,getString(R.string.map_api_key))
-                .enqueue(new Callback<ResponseBody>() {
+                .enqueue(new Callback<NearbyStoreDataModel>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<NearbyStoreDataModel> call, Response<NearbyStoreDataModel> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             progBar.setVisibility(View.GONE);
                             if (response.body()!=null) {
                                 preferences.saveQuery(activity, new QueryModel(query.trim()));
-                                try {
-                                    Log.e("kdkdkdkk",response.body().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                //   updateAdapter(response.body().getResults());
+                                updateAdapter(response.body().getResults());
 
                             } else {
                                 ll_no_store.setVisibility(View.VISIBLE);
@@ -282,7 +277,7 @@ public class Fragment_Search extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<NearbyStoreDataModel> call, Throwable t) {
                         try {
 
 
@@ -343,6 +338,7 @@ public class Fragment_Search extends Fragment {
     private void updateAdapter(List<NearbyModel> results) {
 
         nearbyModelList.addAll(results);
+        Collections.sort(nearbyModelList,NearbyModel.distanceComparator);
         adapter.notifyDataSetChanged();
         queryModelList.clear();
         queryModelList.addAll(preferences.getAllQueries(activity));

@@ -2,6 +2,7 @@ package com.endpoint.giveme.activities_fragments.activity_sign_in.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -47,7 +48,7 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
     private static final String TAG = "TYPE";
     private ImageView arrow;
     private LinearLayout ll_country;
-    private TextView tv_country,tv_code,tv_note;
+    private TextView tv_country,tv_code,tv_note,tv_skip;
     //edt_phone
     private EditText edtname,edtpass;
     private FloatingActionButton fab;
@@ -108,6 +109,14 @@ public class Fragment_Phone extends Fragment implements OnCountryPickerListener 
         edtpass=view.findViewById(R.id.edtPassword);
         fab = view.findViewById(R.id.fab);
 tv_new=view.findViewById(R.id.tv_new);
+        tv_skip=view.findViewById(R.id.tv_skip);
+
+        tv_skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavigateToClientHomeActivity();
+            }
+        });
 tv_new.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -148,7 +157,15 @@ tv_new.setOnClickListener(new View.OnClickListener() {
 
     }
 
+    public void NavigateToClientHomeActivity()
+    {
+        Intent intent = new Intent(activity, ClientHomeActivity.class);
+        startActivity(intent);
+        activity.finish();
 
+
+
+    }
     private void CheckData() {
         String phone_regex = "^[+]?[0-9]{6,}$";
 

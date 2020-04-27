@@ -46,7 +46,7 @@ public interface Service {
     );
 
     @GET("place/nearbysearch/json")
-    Call<ResponseBody> getNearbySearchStores(@Query(value = "location") String location,
+    Call<NearbyStoreDataModel> getNearbySearchStores(@Query(value = "location") String location,
                                                      @Query(value = "radius") int radius,
                                                      @Query(value = "name") String query,
                                                      @Query(value = "language") String language,
