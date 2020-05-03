@@ -255,7 +255,7 @@ public class Fragment_Client_Store extends Fragment {
             Log.e("query",query);
 
             Api.getService("https://maps.googleapis.com/maps/api/")
-                    .getNearbyStores(loc,15000,query,current_language,getString(R.string.map_api_key))
+                    .getNearbyStores(loc,15000,query,current_language,getString(R.string.map_api_key2))
                     .enqueue(new Callback<NearbyStoreDataModel>() {
                         @Override
                         public void onResponse(Call<NearbyStoreDataModel> call, Response<NearbyStoreDataModel> response) {

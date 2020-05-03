@@ -81,16 +81,17 @@ public class NearbySearchAdapter extends RecyclerView.Adapter<NearbySearchAdapte
         }
 
         public void BindData(NearbyModel nearbyModel) {
-            if (nearbyModel.getPhotos().size()>0)
+        /*    if (nearbyModel.getPhotos().size()>0)
             {
                 String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+nearbyModel.getPhotos().get(0).getPhoto_reference()+"&key=AIzaSyBXYdxWjXHPrZ1Qv5jBujwc2frR1_QRabg";
                 Picasso.with(context).load(Uri.parse(url)).fit().into(image);
 
             }else
-            {
+            {*/
                 Picasso.with(context).load(Uri.parse(nearbyModel.getIcon())).fit().into(image);
 
-            }            tv_name.setText(nearbyModel.getName());
+         //   }
+            tv_name.setText(nearbyModel.getName());
             tv_address.setText(nearbyModel.getVicinity());
             tv_rate.setText(String.valueOf(nearbyModel.getRating()));
             double distance = SphericalUtil.computeDistanceBetween(new LatLng(user_lat,user_lng),new LatLng(nearbyModel.getGeometry().getLocation().getLat(),nearbyModel.getGeometry().getLocation().getLng()));
